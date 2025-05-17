@@ -6,6 +6,8 @@ Member: <br>
 - Soraya Azzizah Pahlevi
 - Thalita Salma
 
+<br>[Link tugas](https://emas2.ui.ac.id/pluginfile.php/5081770/mod_resource/content/0/final%20project_2025.pdf)<br>
+
 ## Local Job Matching Application
 Topic: SDGS 8 "Decent Work and Economic Growth" <br>
 
