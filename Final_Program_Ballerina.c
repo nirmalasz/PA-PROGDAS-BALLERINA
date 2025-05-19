@@ -7,7 +7,10 @@
 
 
 //function prototype
-int hitungMatchSkill(dataJobSeeker *pekerja, dataUMKM *umkm);
+void toLower(char *skill);
+int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm);
+void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM);
+void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja);
 
 
 typedef enum{
