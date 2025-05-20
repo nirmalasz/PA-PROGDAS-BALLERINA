@@ -6,13 +6,7 @@
 
 
 
-//function prototype
-void toLower(char *skill);
-int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm);
-void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM);
-void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja);
-
-
+//struct enum
 typedef enum{
     tidak_sekolah, SD, SMP, SMA, D3, D4, S1, S2, S3
 } tingkatPendidikan;
@@ -21,7 +15,7 @@ typedef struct {
     char namaPekerja[50];
     char kotaTinggal[20];
     tingkatPendidikan pendidikanTerakhir;
-    int skillDipunyai[10][20];
+    char skillDipunyai[10][20];
     int jumlahSkillDipunya;
     float gajiEkspektasi;
     char posisiEkspektasi[20];
@@ -31,27 +25,43 @@ typedef struct {
     char namaUMKM[50];
     char kotaUMKM[20];
     tingkatPendidikan minimalPendidikan;
-    int skillDibutuhkan[5][20];
+    char skillDibutuhkan[5][20];
     int jumlahSkillDibutuhkan;
     float gajiMinimal;
     char posisiDibutuhkan[20];
 } dataUMKM;
 
+//function prototype
+void toLowerRemoveSpace(char *skill);
+int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm);
+void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM);
+void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja);
+
+
 
 int main(){
 
-
+    
+    
     return 0;
 }
 
 //function
 
 //fungsi untuk comparing agar lowercase dan uppercase seragam
-void toLower(char *skill){
+void toLowerRemoveSpace(char *skill){
+    int j = 0;
     for (int i = 0; i < skill[i]; i++)
     {
         skill[i] = tolower(skill[i]);
     }
+    for (int i = 0; skill[i] != '\0'; i++)
+    {
+        if(skill[i] != ' '){
+            skill[j++] = skill[i];
+        }
+    }
+    skill[j] = '\0';
 }
 
 //fungsi hitung match score antara perushaan a dan pekerja b
@@ -67,7 +77,7 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
             strcpy(skillUser, pekerja->skillDipunyai[i]);
             strcpy(skillUMKM, umkm->skillDibutuhkan[i]);
 
-            toLower(skillUMKM); toLower(skillUser);
+            toLowerRemoveSpace(skillUMKM); toLowerRemoveSpace(skillUser);
 
             if (strcmp(skillUMKM,skillUser) == 0) score += 10;
         }
@@ -88,9 +98,11 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
     if(umkm->gajiMinimal >= pekerja->gajiEkspektasi) score += 10;
     
     //hitung berdasar level pendidikan
+    if (pekerja->pendidikanTerakhir == umkm->minimalPendidikan) score += 5;
     if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) score += 10;
     else score *= 0;
 
+    return score;
 }
 
 //fungsi rekomendasi umkm bagi jobseeker
@@ -98,7 +110,7 @@ void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUM
     printf("List Rekomendasi UMKM untuk %s:\n", pekerja->namaPekerja);
     for (int i = 0; i < jumlahUMKM; i++)
     {
-        int scoreMatch = hitungMatchSkill(pekerja, &daftarUMKM[i]);
+        int scoreMatch = calculateMatchScore(pekerja, &daftarUMKM[i]);
         if (scoreMatch >= 20 && scoreMatch < 70)
         {
             printf("> %s : cocok [matching score sebesar %d]\n", daftarUMKM[i].namaUMKM, scoreMatch);
@@ -114,7 +126,7 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
     printf("List Rekomendasi pekerja untuk usaha %s:\n", umkm->namaUMKM);
     for (int i = 0; i < jumlahPekerja; i++)
     {
-        int scoreMatch = hitungMatchSkill(umkm, &daftarPekerja[i]);
+        int scoreMatch = calculateMatchScore(&daftarPekerja[i], umkm);
         if (scoreMatch >= 20 && scoreMatch < 70)
         {
             printf("> %s : cocok [matching score sebesar %d]\n", daftarPekerja[i].namaPekerja, scoreMatch);
