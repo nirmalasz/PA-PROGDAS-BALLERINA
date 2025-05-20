@@ -41,7 +41,7 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
 
 int main(){
 
-    
+
     
     return 0;
 }
@@ -86,6 +86,7 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
     char kotaUser[20], kotaUMKM[20];
     strcpy(kotaUser, pekerja->kotaTinggal);
     strcpy(kotaUMKM, umkm->kotaUMKM);
+    toLowerRemoveSpace(kotaUMKM); toLowerRemoveSpace(kotaUser);
     if (strcmp(kotaUser, kotaUMKM ) == 0) score += 5;
     
     //hitung berdasar posisi yang sama
