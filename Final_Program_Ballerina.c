@@ -36,10 +36,107 @@ void toLowerRemoveSpace(char *skill);
 int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm);
 void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM);
 void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja);
-
+void registerUMKM( dataUMKM* inputUMKM);
 
 
 int main(){
+    dataUMKM listUMKM[11] = {
+
+    [1] = {
+        .namaUMKM = "Toko Roti Ceria",
+        .kotaUMKM = "Bandung",
+        .minimalPendidikan = SMA,
+        .skillDibutuhkan = { "memasak", "kebersihan", "komunikasi" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3000000,
+        .posisiDibutuhkan = "Asisten Dapur"
+    },
+    [2] = {
+        .namaUMKM = "Bengkel Motor Jaya",
+        .kotaUMKM = "Yogyakarta",
+        .minimalPendidikan = SMP,
+        .skillDibutuhkan = { "mekanik", "kerjasama", "problem solving" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3500000,
+        .posisiDibutuhkan = "Montir"
+    },
+    [3] = {
+        .namaUMKM = "Warung Kopi Nusantara",
+        .kotaUMKM = "Malang",
+        .minimalPendidikan = SMA,
+        .skillDibutuhkan = { "barista", "komunikasi", "multitasking" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3200000,
+        .posisiDibutuhkan = "Barista"
+    },
+    [4] = {
+        .namaUMKM = "Konveksi Bunda",
+        .kotaUMKM = "Surabaya",
+        .minimalPendidikan = D3,
+        .skillDibutuhkan = { "menjahit", "ketelitian", "desain dasar" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3800000,
+        .posisiDibutuhkan = "Penjahit"
+    },
+    [5] = {
+        .namaUMKM = "Kedai Sehat Hijau",
+        .kotaUMKM = "Depok",
+        .minimalPendidikan = S1,
+        .skillDibutuhkan = { "manajemen", "komunikasi", "keuangan" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 4500000,
+        .posisiDibutuhkan = "Manajer Operasional"
+    },
+    [6] = {
+        .namaUMKM = "Studio Foto Cerah",
+        .kotaUMKM = "Bogor",
+        .minimalPendidikan = SMA,
+        .skillDibutuhkan = { "fotografi", "editing", "kreativitas" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 4000000,
+        .posisiDibutuhkan = "Fotografer"
+    },
+    [7] = {
+        .namaUMKM = "Laundry Express Bersih",
+        .kotaUMKM = "Jakarta",
+        .minimalPendidikan = SMP,
+        .skillDibutuhkan = { "kebersihan", "efisiensi", "komunikasi" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3100000,
+        .posisiDibutuhkan = "Petugas Laundry"
+    },
+    [8] = {
+        .namaUMKM = "Percetakan Digital Pro",
+        .kotaUMKM = "Bekasi",
+        .minimalPendidikan = D3,
+        .skillDibutuhkan = { "desain grafis", "pengoperasian mesin", "ketelitian" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 4200000,
+        .posisiDibutuhkan = "Operator Mesin Cetak"
+    },
+    [9] = {
+        .namaUMKM = "Toko Bunga Mawar",
+        .kotaUMKM = "Semarang",
+        .minimalPendidikan = SMA,
+        .skillDibutuhkan = { "merangkai bunga", "pelayanan pelanggan", "kreativitas" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3300000,
+        .posisiDibutuhkan = "Florist"
+    },
+    [10] = {
+        .namaUMKM = "Katering Harapan Ibu",
+        .kotaUMKM = "Tangerang",
+        .minimalPendidikan = D4,
+        .skillDibutuhkan = { "memasak", "pengemasan", "manajemen waktu" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 4600000,
+        .posisiDibutuhkan = "Koki"
+    }
+};
+
+// ini nyoba print tadi. printf("%s",listUMKM[2].namaUMKM);
+
+    registerUMKM(&listUMKM[0]);
 
 
     
@@ -73,9 +170,10 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
         for (int j = 0; j < umkm->jumlahSkillDibutuhkan; j++)
         {
             char skillUser[20], skillUMKM[20];
-
+            
             strcpy(skillUser, pekerja->skillDipunyai[i]);
             strcpy(skillUMKM, umkm->skillDibutuhkan[i]);
+            
 
             toLowerRemoveSpace(skillUMKM); toLowerRemoveSpace(skillUser);
 
@@ -94,7 +192,7 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
     strcpy(posisiDiinginkan, pekerja->posisiEkspektasi);
     strcpy(posisiDicari, umkm->posisiDibutuhkan);
     if (strcmp(kotaUser, kotaUMKM ) == 0) score += 10;
-
+    
     //hitung berdasar gaji
     if(umkm->gajiMinimal >= pekerja->gajiEkspektasi) score += 10;
     
@@ -102,6 +200,7 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
     if (pekerja->pendidikanTerakhir == umkm->minimalPendidikan) score += 5;
     if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) score += 10;
     else score *= 0;
+    
 
     return score;
 }
@@ -138,6 +237,31 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
     }
 }
 
+//fungsi untuk input peimilik UMKM
+void registerUMKM( dataUMKM* inputUMKM){
+    printf("Input nama UMKM anda: ");
+    scanf("%[^\n]", inputUMKM->namaUMKM);
+    getchar();
+    printf("\nInput kota UMKM anda: ");
+    scanf("%[^\n]", inputUMKM->kotaUMKM);
+    getchar();
+    printf("\nMinimal pendidikan untuk apply \n(0=SD, 1=SMP, 2=SMA, 3=D3, 4=D4, 5=S1, 6=S2, 7=S3): ");
+    scanf("%d", inputUMKM->minimalPendidikan);
+    getchar();
+    printf("\nSkill yang dibutuhkan untuk apply: ");
+    scanf("%[^\n]", inputUMKM->skillDibutuhkan);
+    getchar();
+    printf("\nJumlah skill yang dibutuhkan untuk apply: ");
+    scanf("%d", inputUMKM->jumlahSkillDibutuhkan);
+    getchar();
+    printf("\nGaji minimal yang diberikan: ");
+    scanf("%lf", inputUMKM->gajiMinimal);
+    getchar();
+    printf("\nPosisi yang dibutuhkan: ");
+    scanf("%[^\n]", inputUMKM->posisiDibutuhkan);
+    getchar();
+
+}
 
 
 
