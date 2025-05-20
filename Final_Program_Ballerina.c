@@ -39,8 +39,8 @@ typedef struct {
 
 
 int main(){
-
-
+    
+    
     return 0;
 }
 
@@ -63,12 +63,12 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
         for (int j = 0; j < umkm->jumlahSkillDibutuhkan; j++)
         {
             char skillUser[20], skillUMKM[20];
-
+            
             strcpy(skillUser, pekerja->skillDipunyai[i]);
             strcpy(skillUMKM, umkm->skillDibutuhkan[i]);
-
+            
             toLower(skillUMKM); toLower(skillUser);
-
+            
             if (strcmp(skillUMKM,skillUser) == 0) score += 10;
         }
     }
@@ -83,14 +83,14 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
     strcpy(posisiDiinginkan, pekerja->posisiEkspektasi);
     strcpy(posisiDicari, umkm->posisiDibutuhkan);
     if (strcmp(kotaUser, kotaUMKM ) == 0) score += 10;
-
+    
     //hitung berdasar gaji
     if(umkm->gajiMinimal >= pekerja->gajiEkspektasi) score += 10;
     
     //hitung berdasar level pendidikan
     if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) score += 10;
     else score *= 0;
-
+    
 }
 
 //fungsi rekomendasi umkm bagi jobseeker
@@ -125,6 +125,23 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
     }
 }
 
+void registerUMKM( dataUMKM* inputUMKM){
+    printf("Input nama UMKM anda ");
+    scanf("%[^\n]", inputUMKM->namaUMKM);
+    printf("\nInput kota UMKM anda ");
+    scanf("%[^\n]", inputUMKM->kotaUMKM);
+    printf("\nMinimal pendidikan untuk apply (0=SD, 1=SMP, 2=SMA, 3=D3, 4=D4, 5=S1, 6=S2, 7=S3)");
+    scanf("%d", inputUMKM->minimalPendidikan);
+    printf("\nSkill yang dibutuhkan untuk apply");
+    scanf("%[^\n]", inputUMKM->skillDibutuhkan);
+    printf("\nJumlah skill yang dibutuhkan untuk apply");
+    scanf("%d", inputUMKM->skillDibutuhkan);
+    printf("\nGaji minimal yang diberikan");
+    scanf("%f", inputUMKM->gajiMinimal);
+    printf("\nPosisi yang dibutuhkan ");
+    scanf("%[^\n]", inputUMKM->posisiDibutuhkan);
+
+}
 
 
 
