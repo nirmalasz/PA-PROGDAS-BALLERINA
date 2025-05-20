@@ -5,7 +5,6 @@
 #include <ctype.h>
 
 
-
 //struct enum
 typedef enum{
     tidak_sekolah, SD, SMP, SMA, D3, D4, S1, S2, S3
@@ -40,6 +39,7 @@ void registerUMKM( dataUMKM* inputUMKM);
 
 
 int main(){
+    int role;
     dataUMKM listUMKM[11] = {
 
     [1] = {
@@ -135,9 +135,85 @@ int main(){
 };
 
 // ini nyoba print tadi. printf("%s",listUMKM[2].namaUMKM);
+    printf("== HireMeow ==\n");
+    printf("Your Local Job Matching Application!!\n");
+    printf("-------------------------------------");
 
-    registerUMKM(&listUMKM[0]);
+    printf("\nApakah anda seorang Pekerja atau UMKM?");
+    printf("\n1. UMKM");
+    printf("\n2. Pekerja");
 
+    printf("\n Pilhan Anda: ");
+    scanf("%d", &role);
+
+    if (role == 1) {
+        int n;
+        
+        do {
+            printf("== MENU UMKM ==");
+            printf("\n 1. Register");
+            printf("\n 2. Rekomendasi Pekerja");
+            printf("\n 3. List Semua Pekerja");
+            printf("\n 4. Exit");
+            printf("Pilihan Anda: ");
+            scanf("%d", &n);
+
+            switch (n)
+            {
+            case 1:
+                registerUMKM(&listUMKM[0]);
+                break;
+            case 2:
+                // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
+                break;
+            case 3:
+                // Fungsi View All
+                break;
+            case 4:
+                printf("Keluar Program!");
+                return 0;
+            default:
+                printf("Pilihan anda tidak ada di opsi!");
+                break;
+            }
+        } while (n!=-1);
+    } 
+    else if (role == 2) {
+        int n;
+        
+        do {
+            printf("== MENU Pekerja ==");
+            printf("\n 1. Register");
+            printf("\n 2. Rekomendasi UMKM");
+            printf("\n 3. List Semua UMKM");
+            printf("\n 4. Exit");
+            printf("Pilihan Anda: ");
+            scanf("%d", &n);
+
+            switch (n)
+            {
+            case 1:
+                //registerUMKM(&listPekerja[0]); (belum ditambahkan)
+                break;
+            case 2:
+                //rekomendasiPekerja(listPekerja[0]);
+                break;
+            case 3:
+                // Fungsi View All
+                break;
+            case 4:
+                printf("Keluar Program!");
+                return 0;
+            default:
+                printf("Pilihan anda tidak ada di opsi!");
+                break;
+            }
+        } while (n!=-1);
+    
+    }
+    else {
+        printf("Input Tidak Valid!");
+    }
 
     
     return 0;
@@ -260,12 +336,6 @@ void registerUMKM( dataUMKM* inputUMKM){
     printf("\nPosisi yang dibutuhkan: ");
     scanf("%[^\n]", inputUMKM->posisiDibutuhkan);
     getchar();
-
 }
 
-
-
-
-
-
-
+//fungsi untuk input Pekerja 
