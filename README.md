@@ -1,7 +1,7 @@
 # PA-PROGDAS-BALLERINA
 Group: Ballerina <br>
 Member: <br>
-- Kayla Joanna Irsy Kusuma
+- Kayla Joanna Irsy Kusumah
 - Nirmala Sari Zahiroh
 - Soraya Azzizah Pahlevi
 - Thalita Salma
