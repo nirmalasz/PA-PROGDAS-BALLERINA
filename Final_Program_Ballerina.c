@@ -261,7 +261,7 @@ void registerUMKM( dataUMKM* inputUMKM){ //beresin linenya jgn jelek
     }
 
     printf("Gaji minimal yang diberikan: ");
-    scanf("%lf", &inputUMKM->gajiMinimal);
+    scanf("%f", &inputUMKM->gajiMinimal);
     getchar();
     
     printf("Posisi yang dibutuhkan: ");
@@ -313,9 +313,9 @@ void showUMKM(dataUMKM* daftarUMKM){
         printf("    Skill yang dibutuhkan: \n");
         for (int j = 0; j < daftarUMKM[i].jumlahSkillDibutuhkan; j++)
         {
-            printf("        %d. %s\n", j+1, daftarUMKM->skillDibutuhkan[j]);
+            printf("        %d. %s\n", j+1, daftarUMKM[i].skillDibutuhkan[j]);
         }
-        printf("    \nGaji Minimal: %f", daftarUMKM[i].gajiMinimal);
+        printf("    Gaji Minimal: Rp%.2f\n\n", daftarUMKM[i].gajiMinimal);
     }
 }
 
