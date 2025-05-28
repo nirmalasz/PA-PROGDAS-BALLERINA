@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <math.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -14,7 +13,7 @@ typedef struct {
     tingkatPendidikan pendidikanTerakhir;
     char skillDipunyai[10][20];
     int jumlahSkillDipunya;
-    float gajiEkspektasi;
+    float gajiEkspektasi; // dalam juta
     char posisiEkspektasi[20];
 } dataJobSeeker;
 
@@ -24,11 +23,10 @@ typedef struct {
     tingkatPendidikan minimalPendidikan;
     char skillDibutuhkan[5][20];
     int jumlahSkillDibutuhkan;
-    float gajiMinimal;
+    float gajiMinimal; // dalam juta
     char posisiDibutuhkan[20];
 } dataUMKM;
 
-// Function prototypes
 void toLowerRemoveSpace(char *skill);
 int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm);
 void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM);
@@ -36,7 +34,6 @@ void registerJobSeeker(dataJobSeeker *pekerja);
 
 int main() {
     dataJobSeeker pekerja;
-
     dataUMKM listUMKM[10] = {
         {
             .namaUMKM = "Toko Roti Ceria",
@@ -44,7 +41,7 @@ int main() {
             .minimalPendidikan = SMA,
             .skillDibutuhkan = { "memasak", "kebersihan", "komunikasi" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 3000000,
+            .gajiMinimal = 3.0,
             .posisiDibutuhkan = "Asisten Dapur"
         },
         {
@@ -53,7 +50,7 @@ int main() {
             .minimalPendidikan = SMP,
             .skillDibutuhkan = { "mekanik", "kerjasama", "problem solving" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 3500000,
+            .gajiMinimal = 3.5,
             .posisiDibutuhkan = "Montir"
         },
         {
@@ -62,7 +59,7 @@ int main() {
             .minimalPendidikan = SMA,
             .skillDibutuhkan = { "barista", "komunikasi", "multitasking" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 3200000,
+            .gajiMinimal = 3.2,
             .posisiDibutuhkan = "Barista"
         },
         {
@@ -71,7 +68,7 @@ int main() {
             .minimalPendidikan = D3,
             .skillDibutuhkan = { "menjahit", "ketelitian", "desain dasar" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 3800000,
+            .gajiMinimal = 3.8,
             .posisiDibutuhkan = "Penjahit"
         },
         {
@@ -80,7 +77,7 @@ int main() {
             .minimalPendidikan = S1,
             .skillDibutuhkan = { "manajemen", "komunikasi", "keuangan" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 4500000,
+            .gajiMinimal = 4.5,
             .posisiDibutuhkan = "Manajer Operasional"
         },
         {
@@ -89,7 +86,7 @@ int main() {
             .minimalPendidikan = SMA,
             .skillDibutuhkan = { "fotografi", "editing", "kreativitas" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 4000000,
+            .gajiMinimal = 4.0,
             .posisiDibutuhkan = "Fotografer"
         },
         {
@@ -98,7 +95,7 @@ int main() {
             .minimalPendidikan = SMP,
             .skillDibutuhkan = { "kebersihan", "efisiensi", "komunikasi" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 3100000,
+            .gajiMinimal = 3.1,
             .posisiDibutuhkan = "Petugas Laundry"
         },
         {
@@ -107,7 +104,7 @@ int main() {
             .minimalPendidikan = D3,
             .skillDibutuhkan = { "desain grafis", "pengoperasian mesin", "ketelitian" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 4200000,
+            .gajiMinimal = 4.2,
             .posisiDibutuhkan = "Operator Mesin Cetak"
         },
         {
@@ -116,7 +113,7 @@ int main() {
             .minimalPendidikan = SMA,
             .skillDibutuhkan = { "merangkai bunga", "pelayanan pelanggan", "kreativitas" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 3300000,
+            .gajiMinimal = 3.3,
             .posisiDibutuhkan = "Florist"
         },
         {
@@ -125,14 +122,14 @@ int main() {
             .minimalPendidikan = D4,
             .skillDibutuhkan = { "memasak", "pengemasan", "manajemen waktu" },
             .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 4600000,
+            .gajiMinimal = 4.6,
             .posisiDibutuhkan = "Koki"
         }
     };
 
     registerJobSeeker(&pekerja);
 
-    printf("\n--- Hasil Rekomendasi ---\n");
+    printf("\n--- Hasil Rekomendasi UMKM ---\n");
     rekomendasiUMKM(&pekerja, listUMKM, 10);
 
     return 0;
@@ -141,43 +138,43 @@ int main() {
 void registerJobSeeker(dataJobSeeker *pekerja) {
     printf("Nama Anda: ");
     scanf(" %[^\n]", pekerja->namaPekerja);
-    getchar();
 
     printf("Kota Tinggal: ");
     scanf(" %[^\n]", pekerja->kotaTinggal);
-    getchar();
 
-    printf("Pendidikan Terakhir (0: tidak_sekolah - 8: S3): ");
-    scanf("%d", &pekerja->pendidikanTerakhir);
-    getchar();
+    printf("Pendidikan Terakhir:\n");
+    printf("0 = Tidak Sekolah\n");
+    printf("1 = SD\n");
+    printf("2 = SMP\n");
+    printf("3 = SMA\n");
+    printf("4 = D3\n");
+    printf("5 = D4\n");
+    printf("6 = S1\n");
+    printf("7 = S2\n");
+    printf("8 = S3\n");
+    printf("Masukkan pilihan (0-8): ");
+    scanf("%d", (int*)&pekerja->pendidikanTerakhir);
 
     printf("Jumlah Skill yang Anda miliki: ");
     scanf("%d", &pekerja->jumlahSkillDipunya);
-    getchar();
 
     for (int i = 0; i < pekerja->jumlahSkillDipunya; i++) {
         printf("Skill %d: ", i + 1);
         scanf(" %[^\n]", pekerja->skillDipunyai[i]);
-        getchar();
     }
 
-    printf("Gaji Ekspektasi: ");
+    printf("Gaji Ekspektasi (dalam juta): ");
     scanf("%f", &pekerja->gajiEkspektasi);
-    getchar();
 
     printf("Posisi yang Diharapkan: ");
     scanf(" %[^\n]", pekerja->posisiEkspektasi);
-    getchar();
 }
 
 void toLowerRemoveSpace(char *skill) {
     int j = 0;
-    for (int i = 0; skill[i]; i++) {
-        skill[i] = tolower(skill[i]);
-    }
     for (int i = 0; skill[i] != '\0'; i++) {
         if (skill[i] != ' ') {
-            skill[j++] = skill[i];
+            skill[j++] = tolower(skill[i]);
         }
     }
     skill[j] = '\0';
@@ -185,6 +182,7 @@ void toLowerRemoveSpace(char *skill) {
 
 int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm) {
     int score = 0;
+
     for (int i = 0; i < pekerja->jumlahSkillDipunya; i++) {
         for (int j = 0; j < umkm->jumlahSkillDibutuhkan; j++) {
             char skillUser[20], skillUMKM[20];
@@ -194,27 +192,54 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm) {
             toLowerRemoveSpace(skillUser);
             toLowerRemoveSpace(skillUMKM);
 
-            if (strcmp(skillUser, skillUMKM) == 0) score += 10;
+            if (strcmp(skillUser, skillUMKM) == 0) {
+                score += 10;
+            }
         }
     }
 
-    if (strcasecmp(pekerja->kotaTinggal, umkm->kotaUMKM) == 0) score += 5;
-    if (strcasecmp(pekerja->posisiEkspektasi, umkm->posisiDibutuhkan) == 0) score += 10;
-    if (umkm->gajiMinimal >= pekerja->gajiEkspektasi) score += 10;
+    char kotaUser[20], kotaUMKM[20];
+    strcpy(kotaUser, pekerja->kotaTinggal);
+    strcpy(kotaUMKM, umkm->kotaUMKM);
+    toLowerRemoveSpace(kotaUser);
+    toLowerRemoveSpace(kotaUMKM);
+    if (strcmp(kotaUser, kotaUMKM) == 0) {
+        score += 5;
+    }
 
-    if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) score += 10;
-    else score = 0;
+    char posisiUser[20], posisiUMKM[20];
+    strcpy(posisiUser, pekerja->posisiEkspektasi);
+    strcpy(posisiUMKM, umkm->posisiDibutuhkan);
+    toLowerRemoveSpace(posisiUser);
+    toLowerRemoveSpace(posisiUMKM);
+    if (strcmp(posisiUser, posisiUMKM) == 0) {
+        score += 10;
+    }
+
+    if (umkm->gajiMinimal >= pekerja->gajiEkspektasi) {
+        score += 10;
+    }
+
+    if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) {
+        score += 10;
+    } else {
+        score = 0; 
+    }
 
     return score;
 }
 
 void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM) {
+    printf("Rekomendasi UMKM untuk %s:\n", pekerja->namaPekerja);
     for (int i = 0; i < jumlahUMKM; i++) {
-        int score = calculateMatchScore(pekerja, &daftarUMKM[i]);
-        if (score >= 70) {
-            printf("[Sangat Cocok] %s (score: %d)\n", daftarUMKM[i].namaUMKM, score);
-        } else if (score >= 20) {
-            printf("[Cocok] %s (score: %d)\n", daftarUMKM[i].namaUMKM, score);
+        int skor = calculateMatchScore(pekerja, &daftarUMKM[i]);
+
+        if (skor >= 70) {
+            printf("[Sangat Cocok] %s (score: %d)\n", daftarUMKM[i].namaUMKM, skor);
+        } else if (skor >= 20) {
+            printf("[Cocok] %s (score: %d)\n", daftarUMKM[i].namaUMKM, skor);
+        } else {
+            printf("[Kurang Cocok] %s (score: %d)\n", daftarUMKM[i].namaUMKM, skor);
         }
     }
 }
