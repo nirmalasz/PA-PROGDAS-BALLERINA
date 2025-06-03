@@ -5,7 +5,7 @@
 #include <ctype.h>
 
 
-//struct enum
+//struct enum (NIRMALA)
 typedef enum{
     tidak_sekolah, SD, SMP, SMA, D3, D4, S1, S2, S3
 } tingkatPendidikan;
@@ -31,6 +31,8 @@ typedef struct {
 } dataUMKM;
 
 //function prototype
+const char* getOppositeRole(const char* role);
+int showMenu(const char *role);
 void toLowerRemoveSpace(char *skill);
 int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm);
 void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM);
@@ -39,9 +41,12 @@ void registerUMKM( dataUMKM* inputUMKM);
 
 
 int main(){
-    int role;
+    int roleInt;
+    char roleStr[20];
+    int pilihan;
     dataUMKM listUMKM[11] = {
-
+    
+//data UMKM (JOANNA)   
     [1] = {
         .namaUMKM = "Toko Roti Ceria",
         .kotaUMKM = "Bandung",
@@ -134,86 +139,81 @@ int main(){
     }
 };
 
-// ini nyoba print tadi. printf("%s",listUMKM[2].namaUMKM);
+//Main UI (SORAYA)
     printf("== HireMeow ==\n");
     printf("Your Local Job Matching Application!!\n");
-    printf("-------------------------------------");
+    printf("-------------------------------------\n");
 
     printf("\nApakah anda seorang Pekerja atau UMKM?");
     printf("\n1. UMKM");
     printf("\n2. Pekerja");
 
-    printf("\n Pilhan Anda: ");
-    scanf("%d", &role);
+    printf("\nPilhan Anda: ");
+    scanf("%d", &roleInt);
 
-    if (role == 1) {
-        int n;
+    if (roleInt == 1) {
+        strcpy(roleStr, "UMKM");
+    } else if (roleInt == 2) {
+        strcpy(roleStr, "Pekerja");
+    } else {
+        printf("Input Tidak Valid!\n");
+        return 0;
+    }
         
-        do {
-            printf("== MENU UMKM ==");
-            printf("\n 1. Register");
-            printf("\n 2. Rekomendasi Pekerja");
-            printf("\n 3. List Semua Pekerja");
-            printf("\n 4. Exit");
-            printf("Pilihan Anda: ");
-            scanf("%d", &n);
+    do {
+        pilihan = showMenu(roleStr);
 
-            switch (n)
-            {
-            case 1:
+        switch (pilihan)
+        {
+        case 1:
+            if (roleInt == 1) {
+                printf("\n== Register UMKM ==");
                 registerUMKM(&listUMKM[0]);
                 break;
-            case 2:
+            } else if (roleInt == 2) {
+                //fungsi register 
+                break;
+            } 
+            else
+                break;
+        case 2:
+            if (roleInt == 1) {
                 // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
                 break;
-            case 3:
-                // Fungsi View All
+            } else if (roleInt == 2) {
+                //fungsi register 
                 break;
-            case 4:
-                printf("Keluar Program!");
-                return 0;
-            default:
-                printf("Pilihan anda tidak ada di opsi!");
+            } 
+            else
                 break;
-            }
-        } while (n!=-1);
-    } 
-    else if (role == 2) {
-        int n;
-        
-        do {
-            printf("== MENU Pekerja ==");
-            printf("\n 1. Register");
-            printf("\n 2. Rekomendasi UMKM");
-            printf("\n 3. List Semua UMKM");
-            printf("\n 4. Exit");
-            printf("Pilihan Anda: ");
-            scanf("%d", &n);
-
-            switch (n)
-            {
-            case 1:
-                //registerUMKM(&listPekerja[0]); (belum ditambahkan)
+        case 3:
+            if (roleInt == 1) {
+                // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
                 break;
-            case 2:
-                //rekomendasiPekerja(listPekerja[0]);
+            } else if (roleInt == 2) {
+                //fungsi register 
                 break;
-            case 3:
-                // Fungsi View All
+            } 
+            else
                 break;
-            case 4:
-                printf("Keluar Program!");
-                return 0;
-            default:
-                printf("Pilihan anda tidak ada di opsi!");
+        case 4:
+            if (roleInt == 1) {
+                // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
                 break;
-            }
-        } while (n!=-1);
-    
-    }
-    else {
-        printf("Input Tidak Valid!");
-    }
+            } else if (roleInt == 2) {
+                //fungsi register 
+                break;
+            } 
+            else
+                break;
+        case 5:
+            printf("Keluar Program!");
+            return 0;
+        default:
+            printf("Pilihan anda tidak ada di opsi!");
+            break;
+        }
+    } while (pilihan!=-1);
 
     
     return 0;
@@ -221,7 +221,40 @@ int main(){
 
 //function
 
-//fungsi untuk comparing agar lowercase dan uppercase seragam
+//fungsi untuk ganti string Jobseeker dan UMKM (SORAYA)
+const char* getOppositeRole(const char* role) {
+    if (strcmp(role, "UMKM") == 0){
+        return "Pekerja";
+    }
+    if (strcmp(role, "Pekerja") == 0) {
+        return "UMKM"; 
+    }
+    return "Tidak Dikenal";
+}
+//fungsi untuk menampilkan menu berdasarkan role (SORAYA)
+int showMenu(const char *role) {
+    int pilihan;
+    const char *opposite = getOppositeRole(role);
+
+    if (strcmp(opposite, "Tidak Dikenal") == 0) {
+        printf("Role tidak dikenali.\n");
+        return -1;
+    }
+
+    printf("\n== MENU %s ==\n", role);
+    printf("1. Register\n");
+    printf("2. Rekomendasi %s\n", opposite);
+    printf("3. Filter %s Pilihan\n", opposite);
+    printf("4. List Semua %s\n", opposite);
+    printf("5. Exit\n");
+
+    printf("Pilihan Anda: ");
+    scanf("%d", &pilihan);
+
+    return pilihan;
+}
+
+//fungsi untuk comparing agar lowercase dan uppercase seragam (NIRMALA)
 void toLowerRemoveSpace(char *skill){
     int j = 0;
     for (int i = 0; i < skill[i]; i++)
@@ -237,7 +270,7 @@ void toLowerRemoveSpace(char *skill){
     skill[j] = '\0';
 }
 
-//fungsi hitung match score antara perushaan a dan pekerja b
+//fungsi hitung match score antara perushaan a dan pekerja b (NIRMALA)
 int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
     int score = 0;
     //hitung berdasar skill
@@ -281,7 +314,7 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
     return score;
 }
 
-//fungsi rekomendasi umkm bagi jobseeker
+//fungsi rekomendasi umkm bagi jobseeker (NIRMALA)
 void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM){
     printf("List Rekomendasi UMKM untuk %s:\n", pekerja->namaPekerja);
     for (int i = 0; i < jumlahUMKM; i++)
@@ -297,7 +330,7 @@ void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUM
     }
 }
 
-//fungsi rekomendasi pekerja bagi umkm
+//fungsi rekomendasi pekerja bagi umkm (NIRMALA)
 void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja){
     printf("List Rekomendasi pekerja untuk usaha %s:\n", umkm->namaUMKM);
     for (int i = 0; i < jumlahPekerja; i++)
@@ -313,9 +346,9 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
     }
 }
 
-//fungsi untuk input peimilik UMKM
+//fungsi untuk input peimilik UMKM (JOANNA)
 void registerUMKM( dataUMKM* inputUMKM){
-    printf("Input nama UMKM anda: ");
+    printf("\nInput nama UMKM anda: ");
     scanf("%[^\n]", inputUMKM->namaUMKM);
     getchar();
     printf("\nInput kota UMKM anda: ");
@@ -337,5 +370,3 @@ void registerUMKM( dataUMKM* inputUMKM){
     scanf("%[^\n]", inputUMKM->posisiDibutuhkan);
     getchar();
 }
-
-//fungsi untuk input Pekerja 
