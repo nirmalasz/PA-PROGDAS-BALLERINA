@@ -45,14 +45,16 @@ void showUMKM(dataUMKM* daftarUMKM); //Joanna
 void registerJobSeeker(dataJobSeeker *pekerja); //Thalita
 void showPekerja(dataJobSeeker *daftarPekerja); //Thalita
 
+
 // Fungsi utama
 int main() {
     int roleInt;
     char roleStr[20];
     int pilihan;
 
-    // data UMKM (Joanna)
-    dataUMKM listUMKM[11] = {   
+
+    dataUMKM listUMKM[11] = {
+    //data UMKM (JOANNA)   
     [1] = {
         .namaUMKM = "Toko Roti Ceria",
         .kotaUMKM = "Bandung",
@@ -146,6 +148,7 @@ int main() {
     };
 
     // Data pekerja (Thalita)
+
     dataJobSeeker pekerja[11] = {
         [1] = {
             .namaPekerja = "Andi Santoso",
@@ -240,7 +243,8 @@ int main() {
     };
 
 
-    //Main UI (Soraya)
+
+    //Main UI (SORAYA)
     printf("== HireMeow ==\n");
     printf("Your Local Job Matching Application!!\n");
     printf("-------------------------------------\n");
@@ -324,6 +328,7 @@ const char* getOppositeRole(const char* role) {
 }
 
 //fungsi untuk menampilkan menu berdasarkan role (Soraya)
+
 int showMenu(const char *role) {
     int pilihan;
     const char *opposite = getOppositeRole(role);
@@ -443,6 +448,7 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
         int scoreMatch = calculateMatchScore(&daftarPekerja[i], umkm, mode);
         if (scoreMatch >= 20 && scoreMatch < 70) 
         {
+
             printf("> %s : cocok [matching score sebesar %d]\n", daftarPekerja[i].namaPekerja, scoreMatch);
         } else if (scoreMatch >= 70) {
             printf("> %s : sangat cocok [matching score sebesar %d]\n", daftarPekerja[i].namaPekerja, scoreMatch);
@@ -450,7 +456,9 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
     }
 }
 
-//fungsi untuk input pemilik UMKM (Joanna)
+
+//fungsi untuk input pemilik UMKM (JOANNA)
+
 void registerUMKM( dataUMKM* inputUMKM){
     printf("\nInput nama UMKM anda: ");
     getchar();
@@ -549,6 +557,7 @@ void registerJobSeeker(dataJobSeeker *pekerja) {
     printf("Posisi yang Diharapkan: ");
     scanf(" %[^\n]", pekerja->posisiEkspektasi);
 }
+
 
 //fungsi untuk semua pekerja (Thalita)
 void showPekerja(dataJobSeeker *daftarPekerja) {
