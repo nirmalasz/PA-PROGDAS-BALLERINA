@@ -3,50 +3,53 @@
 #include <string.h>
 #include <ctype.h>
 
-// Enum for education levels
+//struct enum (Nirmala)
 typedef enum{
     tidak_sekolah, SD, SMP, SMA, D3, D4, S1, S2, S3
 } tingkatPendidikan;
 
-// Structure for Job Seeker
 typedef struct {
     char namaPekerja[50];
     char kotaTinggal[20];
     tingkatPendidikan pendidikanTerakhir;
     char skillDipunyai[10][20];
     int jumlahSkillDipunya;
-    float gajiEkspektasi; // in millions
+    float gajiEkspektasi;
     char posisiEkspektasi[20];
 } dataJobSeeker;
 
-// Structure for UMKM
 typedef struct {
     char namaUMKM[50];
     char kotaUMKM[20];
     tingkatPendidikan minimalPendidikan;
     char skillDibutuhkan[5][20];
     int jumlahSkillDibutuhkan;
-    float gajiMinimal; // in millions
+    float gajiMinimal;
     char posisiDibutuhkan[20];
 } dataUMKM;
 
-// Function prototypes
-const char* getOppositeRole(const char* role);
-int showMenu(const char *role);
-void toLowerRemoveSpace(char *skill);
-int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm);
-void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM);
-void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja);
-void registerUMKM(dataUMKM* inputUMKM);
-void showUMKM(dataUMKM* daftarUMKM);
+typedef enum{
+    semua, lokasi, gaji, pendidikan
+} modeFilter;
 
-// Main function
+
+// Function prototypes
+const char* getOppositeRole(const char* role); //Soraya
+int showMenu(const char *role); //Soraya
+void toLowerRemoveSpace(char *skill); //Nirmala
+int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm, modeFilter); //Nirmala
+void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM, modeFilter); //Nirmala
+void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja, modeFilter); //Nirmala
+void registerUMKM(dataUMKM* inputUMKM); //Joanna
+void showUMKM(dataUMKM* daftarUMKM); //Joanna
+
+// Fungsi utama
 int main() {
     int roleInt;
     char roleStr[20];
     int pilihan;
 
-    // Data for Job Seekers
+    // Data untuk jobseeker
     dataJobSeeker pekerja[10] = {
         {
             .namaPekerja = "Andi Santoso",
@@ -66,10 +69,10 @@ int main() {
             .gajiEkspektasi = 3.2,
             .posisiEkspektasi = "Montir"
         },
-        // Add other job seekers here
+        // Tambah lagi
     };
 
-    // Data for UMKM
+    // Data untuk UMKM
     dataUMKM listUMKM[10] = {
         {
             .namaUMKM = "Toko Roti Ceria",
@@ -89,13 +92,10 @@ int main() {
             .gajiMinimal = 3.5,
             .posisiDibutuhkan = "Montir"
         },
-        // Add other UMKMs here
+        // Tambah yang lain lagi
     };
 
-    // Register UMKM and show UMKM data
-    registerUMKM(&listUMKM[0]);
-    showUMKM(listUMKM);
-
+    //Tampilan ke user (soraya)
     printf("== HireMeow ==\n");
     printf("Your Local Job Matching Application!!\n");
     printf("-------------------------------------\n");
@@ -157,7 +157,7 @@ int main() {
     return 0;
 }
 
-// Function to get opposite role (Pekerja or UMKM)
+// Fungsi untuk role UMKM atau pekerja (Soraya)
 const char* getOppositeRole(const char* role) {
     if (strcmp(role, "UMKM") == 0) {
         return "Pekerja";
@@ -168,7 +168,7 @@ const char* getOppositeRole(const char* role) {
     return "Tidak Dikenal";
 }
 
-// Function to show menu based on role
+// Fungsi untuk tunjukkan menu berdasar role (Soraya)
 int showMenu(const char *role) {
     int pilihan;
     const char *opposite = getOppositeRole(role);
@@ -191,80 +191,88 @@ int showMenu(const char *role) {
     return pilihan;
 }
 
-// Function to convert string to lowercase and remove spaces
-void toLowerRemoveSpace(char *skill) {
+//fungsi untuk comparing agar lowercase dan uppercase seragam (Nirmala)
+void toLowerRemoveSpace(char *skill){
     int j = 0;
-    for (int i = 0; skill[i] != '\0'; i++) {
+    for (int i = 0; i < skill[i]; i++)
+    {
         skill[i] = tolower(skill[i]);
     }
-    for (int i = 0; skill[i] != '\0'; i++) {
-        if (skill[i] != ' ') {
+    for (int i = 0; skill[i] != '\0'; i++)
+    {
+        if(skill[i] != ' '){
             skill[j++] = skill[i];
         }
     }
     skill[j] = '\0';
 }
 
-// Function to calculate match score between job seeker and UMKM
-int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm) {
+
+//fungsi hitung match score antara perushaan a dan pekerja b (Nirmala)
+int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm, modeFilter mode){
     int score = 0;
+    if(mode > 3 || mode < 0){
+        printf("Filter tidak valid");
+        return -1;
+    }
 
-    // Compare skills
-    for (int i = 0; i < pekerja->jumlahSkillDipunya; i++) {
-        for (int j = 0; j < umkm->jumlahSkillDibutuhkan; j++) {
+    if (mode == 0){
+    //hitung berdasar skill
+    for (int i = 0; i < pekerja->jumlahSkillDipunya; i++)
+    {
+        for (int j = 0; j < umkm->jumlahSkillDibutuhkan; j++)
+        {
             char skillUser[20], skillUMKM[20];
-            strcpy(skillUser, pekerja->skillDipunyai[i]);
-            strcpy(skillUMKM, umkm->skillDibutuhkan[j]);
-            toLowerRemoveSpace(skillUser);
-            toLowerRemoveSpace(skillUMKM);
 
-            if (strcmp(skillUser, skillUMKM) == 0) {
-                score += 10;
-            }
+            strcpy(skillUser, pekerja->skillDipunyai[i]);
+            strcpy(skillUMKM, umkm->skillDibutuhkan[i]);
+
+            toLowerRemoveSpace(skillUMKM); toLowerRemoveSpace(skillUser);
+
+            if (strcmp(skillUMKM,skillUser) == 0) score += 10;
         }
     }
 
-    // Compare city
-    char kotaUser[20], kotaUMKM[20];
-    strcpy(kotaUser, pekerja->kotaTinggal);
-    strcpy(kotaUMKM, umkm->kotaUMKM);
-    toLowerRemoveSpace(kotaUser);
-    toLowerRemoveSpace(kotaUMKM);
-    if (strcmp(kotaUser, kotaUMKM) == 0) {
-        score += 5;
+       //hitung berdasar posisi yang sama
+    char posisiDiinginkan[20], posisiDicari[20];
+    strcpy(posisiDiinginkan, pekerja->posisiEkspektasi);
+    strcpy(posisiDicari, umkm->posisiDibutuhkan);
+    if (strcmp(posisiDiinginkan, posisiDicari) == 0) score += 10;
+    }
+    
+    if(mode == 0 || mode == 1){
+        //hitung berdasar kota yang sama
+        char kotaUser[20], kotaUMKM[20];
+        strcpy(kotaUser, pekerja->kotaTinggal);
+        strcpy(kotaUMKM, umkm->kotaUMKM);
+        toLowerRemoveSpace(kotaUMKM); toLowerRemoveSpace(kotaUser);
+        if (strcmp(kotaUser, kotaUMKM ) == 0) score += 5;
     }
 
-    // Compare position
-    char posisiUser[20], posisiUMKM[20];
-    strcpy(posisiUser, pekerja->posisiEkspektasi);
-    strcpy(posisiUMKM, umkm->posisiDibutuhkan);
-    toLowerRemoveSpace(posisiUser);
-    toLowerRemoveSpace(posisiUMKM);
-    if (strcmp(posisiUser, posisiUMKM) == 0) {
-        score += 10;
-    }
 
-    // Compare salary
-    if (umkm->gajiMinimal >= pekerja->gajiEkspektasi) {
-        score += 10;
+    if(mode == 0 || mode == 2){
+    //hitung berdasar gaji
+    if(umkm->gajiMinimal >= pekerja->gajiEkspektasi) score += 10;
     }
-
-    // Compare education level
-    if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) {
-        score += 10;
-    } else {
-        score = 0; 
+    
+    if(mode == 0 || mode ==3){
+        //hitung berdasar level pendidikan
+        if (pekerja->pendidikanTerakhir == umkm->minimalPendidikan) score += 5;
+        if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) score += 10;
+        else score *= 0;
     }
-
+    
     return score;
 }
 
-// Function to recommend UMKMs to job seeker
-void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM) {
+//fungsi rekomendasi umkm bagi jobseeker (Nirmala)
+void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM, modeFilter mode){
     printf("List Rekomendasi UMKM untuk %s:\n", pekerja->namaPekerja);
-    for (int i = 0; i < jumlahUMKM; i++) {
-        int scoreMatch = calculateMatchScore(pekerja, &daftarUMKM[i]);
-        if (scoreMatch >= 20 && scoreMatch < 70) {
+    for (int i = 0; i < jumlahUMKM; i++)
+    {
+        int scoreMatch = calculateMatchScore(pekerja, &daftarUMKM[i], mode);
+        if (scoreMatch >= 20 && scoreMatch < 70)
+        {
             printf("> %s : cocok [matching score sebesar %d]\n", daftarUMKM[i].namaUMKM, scoreMatch);
         } else if (scoreMatch >= 70) {
             printf("> %s : sangat cocok [matching score sebesar %d]\n", daftarUMKM[i].namaUMKM, scoreMatch);
@@ -272,11 +280,13 @@ void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUM
     }
 }
 
-// Function to recommend job seekers to UMKM
-void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja) {
+
+//fungsi rekomendasi pekerja bagi umkm (Nirmala)
+void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja, modeFilter mode){
     printf("List Rekomendasi pekerja untuk usaha %s:\n", umkm->namaUMKM);
-    for (int i = 0; i < jumlahPekerja; i++) {
-        int scoreMatch = calculateMatchScore(&daftarPekerja[i], umkm);
+    for (int i = 0; i < jumlahPekerja; i++)
+    {
+        int scoreMatch = calculateMatchScore(&daftarPekerja[i], umkm, mode);
         if (scoreMatch >= 20 && scoreMatch < 70) {
             printf("> %s : cocok [matching score sebesar %d]\n", daftarPekerja[i].namaPekerja, scoreMatch);
         } else if (scoreMatch >= 70) {
@@ -285,7 +295,7 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
     }
 }
 
-// Function to register a new UMKM
+// Fungsi daftar UMKM (Joanna)
 void registerUMKM(dataUMKM* inputUMKM) {
     printf("\nInput nama UMKM anda: ");
     scanf(" %[^\n]", inputUMKM->namaUMKM);
@@ -303,7 +313,8 @@ void registerUMKM(dataUMKM* inputUMKM) {
     scanf(" %[^\n]", inputUMKM->posisiDibutuhkan);
 }
 
-// Function to show all available UMKMs
+
+// Fungsi show all UMKM (Joanna)
 void showUMKM(dataUMKM* daftarUMKM) {
     printf("\n==== List UMKM yang tersedia: ====\n\n");
     for (int i = 0; i < 10; i++) {
@@ -330,3 +341,4 @@ void showUMKM(dataUMKM* daftarUMKM) {
         printf("    Gaji Minimal: Rp%.2f\n\n", daftarUMKM[i].gajiMinimal);
     }
 }
+
