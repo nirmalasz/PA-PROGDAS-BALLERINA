@@ -33,7 +33,101 @@ void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUM
 void registerJobSeeker(dataJobSeeker *pekerja);
 
 int main() {
-    dataJobSeeker pekerja;
+       // Data pekerja
+    dataJobSeeker pekerja[10] = {
+        {
+            .namaPekerja = "Andi Santoso",
+            .kotaTinggal = "Bandung",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "memasak", "komunikasi", "manajemen" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.5,
+            .posisiEkspektasi = "Asisten Dapur"
+        },
+        {
+            .namaPekerja = "Budi Setiawan",
+            .kotaTinggal = "Yogyakarta",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "mekanik", "kerjasama", "problem solving" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.2,
+            .posisiEkspektasi = "Montir"
+        },
+        {
+            .namaPekerja = "Citra Ayu",
+            .kotaTinggal = "Malang",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "barista", "komunikasi", "multitasking" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.3,
+            .posisiEkspektasi = "Barista"
+        },
+        {
+            .namaPekerja = "Dedi Prasetyo",
+            .kotaTinggal = "Surabaya",
+            .pendidikanTerakhir = D3,
+            .skillDipunyai = { "menjahit", "ketelitian", "desain dasar" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.7,
+            .posisiEkspektasi = "Penjahit"
+        },
+        {
+            .namaPekerja = "Erika Sari",
+            .kotaTinggal = "Depok",
+            .pendidikanTerakhir = S1,
+            .skillDipunyai = { "manajemen", "komunikasi", "keuangan" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 4.2,
+            .posisiEkspektasi = "Manajer Operasional"
+        },
+        {
+            .namaPekerja = "Fikri Wijaya",
+            .kotaTinggal = "Bogor",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "fotografi", "editing", "kreativitas" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 4.0,
+            .posisiEkspektasi = "Fotografer"
+        },
+        {
+            .namaPekerja = "Gina Rahmawati",
+            .kotaTinggal = "Jakarta",
+            .pendidikanTerakhir = SMP,
+            .skillDipunyai = { "kebersihan", "efisiensi", "komunikasi" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.1,
+            .posisiEkspektasi = "Petugas Laundry"
+        },
+        {
+            .namaPekerja = "Hendra Saputra",
+            .kotaTinggal = "Bekasi",
+            .pendidikanTerakhir = D3,
+            .skillDipunyai = { "desain grafis", "pengoperasian mesin", "ketelitian" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 4.0,
+            .posisiEkspektasi = "Operator Mesin Cetak"
+        },
+        {
+            .namaPekerja = "Indah Permatasari",
+            .kotaTinggal = "Semarang",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "merangkai bunga", "pelayanan pelanggan", "kreativitas" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.4,
+            .posisiEkspektasi = "Florist"
+        },
+        {
+            .namaPekerja = "Joko Nugroho",
+            .kotaTinggal = "Tangerang",
+            .pendidikanTerakhir = D4,
+            .skillDipunyai = { "memasak", "pengemasan", "manajemen waktu" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 4.6,
+            .posisiEkspektasi = "Koki"
+        }
+    };
+
+    // Data UMKM
     dataUMKM listUMKM[10] = {
         {
             .namaUMKM = "Toko Roti Ceria",
@@ -127,10 +221,8 @@ int main() {
         }
     };
 
-    registerJobSeeker(&pekerja);
-
     printf("\n--- Hasil Rekomendasi UMKM ---\n");
-    rekomendasiUMKM(&pekerja, listUMKM, 10);
+    rekomendasiUMKM(&pekerja[0], listUMKM, 10);
 
     return 0;
 }
