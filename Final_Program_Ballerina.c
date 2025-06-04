@@ -559,3 +559,52 @@ void registerJobSeeker(dataJobSeeker *pekerja) {
     scanf(" %[^\n]", pekerja->posisiEkspektasi);
 }
 
+//fungsi untuk show semua pekerja (Thalita)
+void showPekerja(dataJobSeeker *daftarPekerja) {
+    printf("\n==== List Pekerja yang tersedia: ====\n\n");
+    for(int i = 0; i < 11; i++) {
+        printf("%d. ", i + 1);
+        printf("%s\n", daftarPekerja[i].namaPekerja);
+        printf("    Kota Tinggal: %s\n", daftarPekerja[i].kotaTinggal);
+        printf("    Pendidikan Terakhir: ");
+        switch (daftarPekerja[i].pendidikanTerakhir)
+        {
+        case 0:
+            printf("Tidak Sekolah\n");
+            break;
+        case 1:
+            printf("SD\n");
+            break;
+        case 2:
+            printf("SMP\n");
+            break;
+        case 3:
+            printf("SMA\n");
+            break;
+        case 4:
+            printf("D3\n");
+            break;
+        case 5:
+            printf("D4\n");
+            break;
+        case 6:
+            printf("S1\n");
+            break;
+        case 7:
+            printf("S2\n");
+            break;
+        case 8:
+            printf("S3\n");
+            break;
+        default:
+            break;
+        }
+        printf("    Skill yang dimiliki: \n");
+        for (int j = 0; j < daftarPekerja[i].jumlahSkillDipunya; j++)
+        {
+            printf("        %d. %s\n", j + 1, daftarPekerja[i].skillDipunyai[j]);
+        }
+        printf("    Gaji Ekspektasi: Rp%.2f juta\n", daftarPekerja[i].gajiEkspektasi);
+        printf("    Posisi yang Diharapkan: %s\n\n", daftarPekerja[i].posisiEkspektasi);
+    }
+}
