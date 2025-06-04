@@ -524,7 +524,7 @@ void showUMKM(dataUMKM* daftarUMKM) {
 
 //fungsi untuk input pekerja (Thalita)
 void registerJobSeeker(dataJobSeeker *pekerja) {
-    printf("Nama Anda (ex. John Doe): ");
+    printf("\nNama Anda (ex. John Doe): ");
     scanf(" %[^\n]", pekerja->namaPekerja);
 
     printf("Kota Tinggal (ex. Bekasi): ");
