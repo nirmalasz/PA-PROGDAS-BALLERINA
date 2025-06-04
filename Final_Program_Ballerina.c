@@ -14,7 +14,7 @@ typedef struct {
     tingkatPendidikan pendidikanTerakhir;
     char skillDipunyai[10][20];
     int jumlahSkillDipunya;
-    float gajiEkspektasi;
+    float gajiEkspektasi; // dalam juta
     char posisiEkspektasi[20];
 } dataJobSeeker;
 
@@ -24,7 +24,7 @@ typedef struct {
     tingkatPendidikan minimalPendidikan;
     char skillDibutuhkan[5][20];
     int jumlahSkillDibutuhkan;
-    float gajiMinimal;
+    float gajiMinimal; // dalam juta
     char posisiDibutuhkan[20];
 } dataUMKM;
 
@@ -42,6 +42,7 @@ void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUM
 void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja, modeFilter); //Nirmala
 void registerUMKM(dataUMKM* inputUMKM); //Joanna
 void showUMKM(dataUMKM* daftarUMKM); //Joanna
+void registerJobSeeker(dataJobSeeker *pekerja); //Thalita
 
 // Fungsi utama
 int main() {
@@ -49,9 +50,103 @@ int main() {
     char roleStr[20];
     int pilihan;
 
-    // Data untuk jobseeker
-    dataJobSeeker pekerja[10] = {
-        {
+    dataUMKM listUMKM[11] = {
+    //data UMKM (JOANNA)   
+    [1] = {
+        .namaUMKM = "Toko Roti Ceria",
+        .kotaUMKM = "Bandung",
+        .minimalPendidikan = SMA,
+        .skillDibutuhkan = { "memasak", "kebersihan", "komunikasi" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3.0,
+        .posisiDibutuhkan = "Asisten Dapur"
+    },
+    [2] = {
+        .namaUMKM = "Bengkel Motor Jaya",
+        .kotaUMKM = "Yogyakarta",
+        .minimalPendidikan = SMP,
+        .skillDibutuhkan = { "mekanik", "kerjasama", "problem solving" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3.5,
+        .posisiDibutuhkan = "Montir"
+    },
+    [3] = {
+        .namaUMKM = "Warung Kopi Nusantara",
+        .kotaUMKM = "Malang",
+        .minimalPendidikan = SMA,
+        .skillDibutuhkan = { "barista", "komunikasi", "multitasking" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3.2,
+        .posisiDibutuhkan = "Barista"
+    },
+    [4] = {
+        .namaUMKM = "Konveksi Bunda",
+        .kotaUMKM = "Surabaya",
+        .minimalPendidikan = D3,
+        .skillDibutuhkan = { "menjahit", "ketelitian", "desain dasar" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3.8,
+        .posisiDibutuhkan = "Penjahit"
+    },
+    [5] = {
+        .namaUMKM = "Kedai Sehat Hijau",
+        .kotaUMKM = "Depok",
+        .minimalPendidikan = S1,
+        .skillDibutuhkan = { "manajemen", "komunikasi", "keuangan" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 4.5,
+        .posisiDibutuhkan = "Manajer Operasional"
+    },
+    [6] = {
+        .namaUMKM = "Studio Foto Cerah",
+        .kotaUMKM = "Bogor",
+        .minimalPendidikan = SMA,
+        .skillDibutuhkan = { "fotografi", "editing", "kreativitas" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 4.0,
+        .posisiDibutuhkan = "Fotografer"
+    },
+    [7] = {
+        .namaUMKM = "Laundry Express Bersih",
+        .kotaUMKM = "Jakarta",
+        .minimalPendidikan = SMP,
+        .skillDibutuhkan = { "kebersihan", "efisiensi", "komunikasi" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3.1,
+        .posisiDibutuhkan = "Petugas Laundry"
+    },
+    [8] = {
+        .namaUMKM = "Percetakan Digital Pro",
+        .kotaUMKM = "Bekasi",
+        .minimalPendidikan = D3,
+        .skillDibutuhkan = { "desain grafis", "pengoperasian mesin", "ketelitian" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 4.2,
+        .posisiDibutuhkan = "Operator Mesin Cetak"
+    },
+    [9] = {
+        .namaUMKM = "Toko Bunga Mawar",
+        .kotaUMKM = "Semarang",
+        .minimalPendidikan = SMA,
+        .skillDibutuhkan = { "merangkai bunga", "pelayanan pelanggan", "kreativitas" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 3.3,
+        .posisiDibutuhkan = "Florist"
+    },
+    [10] = {
+        .namaUMKM = "Katering Harapan Ibu",
+        .kotaUMKM = "Tangerang",
+        .minimalPendidikan = D4,
+        .skillDibutuhkan = { "memasak", "pengemasan", "manajemen waktu" },
+        .jumlahSkillDibutuhkan = 3,
+        .gajiMinimal = 4.6,
+        .posisiDibutuhkan = "Koki"
+    }
+    };
+
+           // Data pekerja (Thalita)
+    dataJobSeeker pekerja[11] = {
+        [1] = {
             .namaPekerja = "Andi Santoso",
             .kotaTinggal = "Bandung",
             .pendidikanTerakhir = SMA,
@@ -60,7 +155,7 @@ int main() {
             .gajiEkspektasi = 3.5,
             .posisiEkspektasi = "Asisten Dapur"
         },
-        {
+        [2] = {
             .namaPekerja = "Budi Setiawan",
             .kotaTinggal = "Yogyakarta",
             .pendidikanTerakhir = SMA,
@@ -69,33 +164,83 @@ int main() {
             .gajiEkspektasi = 3.2,
             .posisiEkspektasi = "Montir"
         },
-        // Tambah lagi
+        [3] = {
+            .namaPekerja = "Citra Ayu",
+            .kotaTinggal = "Malang",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "barista", "komunikasi", "multitasking" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.3,
+            .posisiEkspektasi = "Barista"
+        },
+        [4] = {
+            .namaPekerja = "Dedi Prasetyo",
+            .kotaTinggal = "Surabaya",
+            .pendidikanTerakhir = D3,
+            .skillDipunyai = { "menjahit", "ketelitian", "desain dasar" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.7,
+            .posisiEkspektasi = "Penjahit"
+        },
+        [5] = {
+            .namaPekerja = "Erika Sari",
+            .kotaTinggal = "Depok",
+            .pendidikanTerakhir = S1,
+            .skillDipunyai = { "manajemen", "komunikasi", "keuangan" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 4.2,
+            .posisiEkspektasi = "Manajer Operasional"
+        },
+        [6] = {
+            .namaPekerja = "Fikri Wijaya",
+            .kotaTinggal = "Bogor",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "fotografi", "editing", "kreativitas" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 4.0,
+            .posisiEkspektasi = "Fotografer"
+        },
+        [7] = {
+            .namaPekerja = "Gina Rahmawati",
+            .kotaTinggal = "Jakarta",
+            .pendidikanTerakhir = SMP,
+            .skillDipunyai = { "kebersihan", "efisiensi", "komunikasi" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.1,
+            .posisiEkspektasi = "Petugas Laundry"
+        },
+        [8] = {
+            .namaPekerja = "Hendra Saputra",
+            .kotaTinggal = "Bekasi",
+            .pendidikanTerakhir = D3,
+            .skillDipunyai = { "desain grafis", "pengoperasian mesin", "ketelitian" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 4.0,
+            .posisiEkspektasi = "Operator Mesin Cetak"
+        },
+        [9] = {
+            .namaPekerja = "Indah Permatasari",
+            .kotaTinggal = "Semarang",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "merangkai bunga", "pelayanan pelanggan", "kreativitas" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.4,
+            .posisiEkspektasi = "Florist"
+        },
+        [10] = {
+            .namaPekerja = "Joko Nugroho",
+            .kotaTinggal = "Tangerang",
+            .pendidikanTerakhir = D4,
+            .skillDipunyai = { "memasak", "pengemasan", "manajemen waktu" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 4.6,
+            .posisiEkspektasi = "Koki"
+        }
     };
 
-    // Data untuk UMKM
-    dataUMKM listUMKM[10] = {
-        {
-            .namaUMKM = "Toko Roti Ceria",
-            .kotaUMKM = "Bandung",
-            .minimalPendidikan = SMA,
-            .skillDibutuhkan = { "memasak", "kebersihan", "komunikasi" },
-            .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 3.0,
-            .posisiDibutuhkan = "Asisten Dapur"
-        },
-        {
-            .namaUMKM = "Bengkel Motor Jaya",
-            .kotaUMKM = "Yogyakarta",
-            .minimalPendidikan = SMP,
-            .skillDibutuhkan = { "mekanik", "kerjasama", "problem solving" },
-            .jumlahSkillDibutuhkan = 3,
-            .gajiMinimal = 3.5,
-            .posisiDibutuhkan = "Montir"
-        },
-        // Tambah yang lain lagi
-    };
 
-    //Tampilan ke user (soraya)
+
+    //Main UI (SORAYA)
     printf("== HireMeow ==\n");
     printf("Your Local Job Matching Application!!\n");
     printf("-------------------------------------\n");
@@ -119,47 +264,66 @@ int main() {
     do {
         pilihan = showMenu(roleStr);
 
-        switch (pilihan) {
+        switch (pilihan)
+        {
         case 1:
             if (roleInt == 1) {
-                printf("\n== Register UMKM ==\n");
+                printf("\n== Register UMKM ==");
                 registerUMKM(&listUMKM[0]);
                 break;
             } else if (roleInt == 2) {
-                // Function for registering job seeker (not yet implemented)
+                //fungsi register 
                 break;
-            }
-            break;
+            } 
+            else
+                break;
         case 2:
             if (roleInt == 1) {
-                // Function to recommend job seekers (not yet implemented)
+                // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
                 break;
             } else if (roleInt == 2) {
-                // Function to recommend UMKM (not yet implemented)
+                //fungsi register 
                 break;
-            }
-            break;
+            } 
+            else
+                break;
         case 3:
-            // Add functionality for filtering job seekers or UMKMs
-            break;
+            if (roleInt == 1) {
+                // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
+                break;
+            } else if (roleInt == 2) {
+                //fungsi register 
+                break;
+            } 
+            else
+                break;
         case 4:
-            // Add functionality to list all job seekers or UMKMs
-            break;
+            if (roleInt == 1) {
+                // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
+                break;
+            } else if (roleInt == 2) {
+                //fungsi register 
+                break;
+            } 
+            else
+                break;
         case 5:
-            printf("Keluar Program!\n");
+            printf("Keluar Program!");
             return 0;
         default:
-            printf("Pilihan anda tidak ada di opsi!\n");
+            printf("Pilihan anda tidak ada di opsi!");
             break;
         }
-    } while (pilihan != -1);
+    } while (pilihan!=-1);
 
     return 0;
 }
 
-// Fungsi untuk role UMKM atau pekerja (Soraya)
+//function
+
+//fungsi untuk ganti string Jobseeker dan UMKM (SORAYA)
 const char* getOppositeRole(const char* role) {
-    if (strcmp(role, "UMKM") == 0) {
+    if (strcmp(role, "UMKM") == 0){
         return "Pekerja";
     }
     if (strcmp(role, "Pekerja") == 0) {
@@ -168,7 +332,7 @@ const char* getOppositeRole(const char* role) {
     return "Tidak Dikenal";
 }
 
-// Fungsi untuk tunjukkan menu berdasar role (Soraya)
+//fungsi untuk menampilkan menu berdasarkan role (SORAYA)
 int showMenu(const char *role) {
     int pilihan;
     const char *opposite = getOppositeRole(role);
@@ -229,7 +393,7 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm, modeFilter mode)
 
             toLowerRemoveSpace(skillUMKM); toLowerRemoveSpace(skillUser);
 
-            if (strcmp(skillUMKM,skillUser) == 0) score += 10;
+            if (strcmp(skillUMKM,skillUser) == 0) score += 15;
         }
     }
 
@@ -246,19 +410,19 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm, modeFilter mode)
         strcpy(kotaUser, pekerja->kotaTinggal);
         strcpy(kotaUMKM, umkm->kotaUMKM);
         toLowerRemoveSpace(kotaUMKM); toLowerRemoveSpace(kotaUser);
-        if (strcmp(kotaUser, kotaUMKM ) == 0) score += 5;
+        if (strcmp(kotaUser, kotaUMKM ) == 0) score += 10;
     }
 
 
     if(mode == 0 || mode == 2){
     //hitung berdasar gaji
-    if(umkm->gajiMinimal >= pekerja->gajiEkspektasi) score += 10;
+    if(umkm->gajiMinimal >= pekerja->gajiEkspektasi) score += 15;
     }
     
     if(mode == 0 || mode ==3){
         //hitung berdasar level pendidikan
-        if (pekerja->pendidikanTerakhir == umkm->minimalPendidikan) score += 5;
-        if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) score += 10;
+        if (pekerja->pendidikanTerakhir == umkm->minimalPendidikan) score += 10;
+        if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) score += 15;
         else score *= 0;
     }
     
@@ -295,29 +459,46 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
     }
 }
 
-// Fungsi daftar UMKM (Joanna)
-void registerUMKM(dataUMKM* inputUMKM) {
+//fungsi untuk input pemilik UMKM (JOANNA)
+void registerUMKM( dataUMKM* inputUMKM){
     printf("\nInput nama UMKM anda: ");
-    scanf(" %[^\n]", inputUMKM->namaUMKM);
-    printf("\nInput kota UMKM anda: ");
-    scanf(" %[^\n]", inputUMKM->kotaUMKM);
-    printf("\nMinimal pendidikan untuk apply \n(0=tidak sekolah, 1=SD, 2=SMP, 3=SMA, 4=D3, 5=D4, 6=S1, 7=S2, 8=S3): ");
+    getchar();
+
+    scanf("%[^\n]", inputUMKM->namaUMKM);
+    getchar();
+
+    printf("Input kota UMKM anda: ");
+    scanf("%[^\n]", inputUMKM->kotaUMKM);
+    getchar();
+
+    printf("Minimal pendidikan untuk apply \n(0=tidak sekolah, 1=SD, 2=SMP, 3=SMA, 4=D3, 5=D4, 6=S1, 7=S2, 8=s3): ");
     scanf("%d", &inputUMKM->minimalPendidikan);
-    printf("\nSkill yang dibutuhkan untuk apply: ");
-    scanf(" %[^\n]", inputUMKM->skillDibutuhkan);
-    printf("\nJumlah skill yang dibutuhkan untuk apply: ");
+    getchar();
+
+    printf("Jumlah skill yang dibutuhkan untuk apply (Maksimal 5): "); 
     scanf("%d", &inputUMKM->jumlahSkillDibutuhkan);
-    printf("\nGaji minimal yang diberikan: ");
+    getchar();
+
+    for(int i=0; i<inputUMKM->jumlahSkillDibutuhkan; i++){
+        printf("Skill %d yang dibutuhkan untuk apply: ", i+1);
+        scanf("%[^\n]", (inputUMKM->skillDibutuhkan[i]));
+        getchar();
+    }
+
+    printf("Gaji minimal yang diberikan: ");
     scanf("%f", &inputUMKM->gajiMinimal);
-    printf("\nPosisi yang dibutuhkan: ");
-    scanf(" %[^\n]", inputUMKM->posisiDibutuhkan);
+    getchar();
+    
+    printf("Posisi yang dibutuhkan: ");
+    scanf("%[^\n]", inputUMKM->posisiDibutuhkan);
+    getchar();
 }
 
 
 // Fungsi show all UMKM (Joanna)
 void showUMKM(dataUMKM* daftarUMKM) {
     printf("\n==== List UMKM yang tersedia: ====\n\n");
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 11; i++) {
         printf("%d. ", i + 1);
         printf("%s\n", daftarUMKM[i].namaUMKM);
         printf("    Kota: %s\n", daftarUMKM[i].kotaUMKM);
@@ -340,5 +521,41 @@ void showUMKM(dataUMKM* daftarUMKM) {
         }
         printf("    Gaji Minimal: Rp%.2f\n\n", daftarUMKM[i].gajiMinimal);
     }
+}
+
+//fungsi untuk input pekerja (Thalita)
+void registerJobSeeker(dataJobSeeker *pekerja) {
+    printf("Nama Anda: ");
+    scanf(" %[^\n]", pekerja->namaPekerja);
+
+    printf("Kota Tinggal: ");
+    scanf(" %[^\n]", pekerja->kotaTinggal);
+
+    printf("Pendidikan Terakhir:\n");
+    printf("0 = Tidak Sekolah\n");
+    printf("1 = SD\n");
+    printf("2 = SMP\n");
+    printf("3 = SMA\n");
+    printf("4 = D3\n");
+    printf("5 = D4\n");
+    printf("6 = S1\n");
+    printf("7 = S2\n");
+    printf("8 = S3\n");
+    printf("Masukkan pilihan (0-8): ");
+    scanf("%d", (int*)&pekerja->pendidikanTerakhir);
+
+    printf("Jumlah Skill yang Anda miliki: ");
+    scanf("%d", &pekerja->jumlahSkillDipunya);
+
+    for (int i = 0; i < pekerja->jumlahSkillDipunya; i++) {
+        printf("Skill %d: ", i + 1);
+        scanf(" %[^\n]", pekerja->skillDipunyai[i]);
+    }
+
+    printf("Gaji Ekspektasi (dalam juta): ");
+    scanf("%f", &pekerja->gajiEkspektasi);
+
+    printf("Posisi yang Diharapkan: ");
+    scanf(" %[^\n]", pekerja->posisiEkspektasi);
 }
 
