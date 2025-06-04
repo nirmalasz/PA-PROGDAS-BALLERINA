@@ -1,149 +1,101 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <math.h>
 #include <string.h>
 #include <ctype.h>
 
-//struct enum (NIRMALA)
-
+// Enum for education levels
 typedef enum{
     tidak_sekolah, SD, SMP, SMA, D3, D4, S1, S2, S3
 } tingkatPendidikan;
 
+// Structure for Job Seeker
 typedef struct {
     char namaPekerja[50];
     char kotaTinggal[20];
     tingkatPendidikan pendidikanTerakhir;
     char skillDipunyai[10][20];
     int jumlahSkillDipunya;
-    float gajiEkspektasi;
+    float gajiEkspektasi; // in millions
     char posisiEkspektasi[20];
 } dataJobSeeker;
 
+// Structure for UMKM
 typedef struct {
     char namaUMKM[50];
     char kotaUMKM[20];
     tingkatPendidikan minimalPendidikan;
     char skillDibutuhkan[5][20];
     int jumlahSkillDibutuhkan;
-    float gajiMinimal;
+    float gajiMinimal; // in millions
     char posisiDibutuhkan[20];
 } dataUMKM;
 
-//function prototype
+// Function prototypes
 const char* getOppositeRole(const char* role);
 int showMenu(const char *role);
 void toLowerRemoveSpace(char *skill);
 int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm);
 void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM);
 void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja);
-void registerUMKM( dataUMKM* inputUMKM);
+void registerUMKM(dataUMKM* inputUMKM);
 void showUMKM(dataUMKM* daftarUMKM);
 
-
-int main(){
+// Main function
+int main() {
     int roleInt;
     char roleStr[20];
     int pilihan;
-    dataUMKM listUMKM[11] = {
-    
-//data UMKM (JOANNA)   
-    [1] = {
-        .namaUMKM = "Toko Roti Ceria",
-        .kotaUMKM = "Bandung",
-        .minimalPendidikan = SMA,
-        .skillDibutuhkan = { "memasak", "kebersihan", "komunikasi" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 3000000,
-        .posisiDibutuhkan = "Asisten Dapur"
-    },
-    [2] = {
-        .namaUMKM = "Bengkel Motor Jaya",
-        .kotaUMKM = "Yogyakarta",
-        .minimalPendidikan = SMP,
-        .skillDibutuhkan = { "mekanik", "kerjasama", "problem solving" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 3500000,
-        .posisiDibutuhkan = "Montir"
-    },
-    [3] = {
-        .namaUMKM = "Warung Kopi Nusantara",
-        .kotaUMKM = "Malang",
-        .minimalPendidikan = SMA,
-        .skillDibutuhkan = { "barista", "komunikasi", "multitasking" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 3200000,
-        .posisiDibutuhkan = "Barista"
-    },
-    [4] = {
-        .namaUMKM = "Konveksi Bunda",
-        .kotaUMKM = "Surabaya",
-        .minimalPendidikan = D3,
-        .skillDibutuhkan = { "menjahit", "ketelitian", "desain dasar" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 3800000,
-        .posisiDibutuhkan = "Penjahit"
-    },
-    [5] = {
-        .namaUMKM = "Kedai Sehat Hijau",
-        .kotaUMKM = "Depok",
-        .minimalPendidikan = S1,
-        .skillDibutuhkan = { "manajemen", "komunikasi", "keuangan" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 4500000,
-        .posisiDibutuhkan = "Manajer Operasional"
-    },
-    [6] = {
-        .namaUMKM = "Studio Foto Cerah",
-        .kotaUMKM = "Bogor",
-        .minimalPendidikan = SMA,
-        .skillDibutuhkan = { "fotografi", "editing", "kreativitas" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 4000000,
-        .posisiDibutuhkan = "Fotografer"
-    },
-    [7] = {
-        .namaUMKM = "Laundry Express Bersih",
-        .kotaUMKM = "Jakarta",
-        .minimalPendidikan = SMP,
-        .skillDibutuhkan = { "kebersihan", "efisiensi", "komunikasi" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 3100000,
-        .posisiDibutuhkan = "Petugas Laundry"
-    },
-    [8] = {
-        .namaUMKM = "Percetakan Digital Pro",
-        .kotaUMKM = "Bekasi",
-        .minimalPendidikan = D3,
-        .skillDibutuhkan = { "desain grafis", "pengoperasian mesin", "ketelitian" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 4200000,
-        .posisiDibutuhkan = "Operator Mesin Cetak"
-    },
-    [9] = {
-        .namaUMKM = "Toko Bunga Mawar",
-        .kotaUMKM = "Semarang",
-        .minimalPendidikan = SMA,
-        .skillDibutuhkan = { "merangkai bunga", "pelayanan pelanggan", "kreativitas" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 3300000,
-        .posisiDibutuhkan = "Florist"
-    },
-    [10] = {
-        .namaUMKM = "Katering Harapan Ibu",
-        .kotaUMKM = "Tangerang",
-        .minimalPendidikan = D4,
-        .skillDibutuhkan = { "memasak", "pengemasan", "manajemen waktu" },
-        .jumlahSkillDibutuhkan = 3,
-        .gajiMinimal = 4600000,
-        .posisiDibutuhkan = "Koki"
-    }
-};
 
+    // Data for Job Seekers
+    dataJobSeeker pekerja[10] = {
+        {
+            .namaPekerja = "Andi Santoso",
+            .kotaTinggal = "Bandung",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "memasak", "komunikasi", "manajemen" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.5,
+            .posisiEkspektasi = "Asisten Dapur"
+        },
+        {
+            .namaPekerja = "Budi Setiawan",
+            .kotaTinggal = "Yogyakarta",
+            .pendidikanTerakhir = SMA,
+            .skillDipunyai = { "mekanik", "kerjasama", "problem solving" },
+            .jumlahSkillDipunya = 3,
+            .gajiEkspektasi = 3.2,
+            .posisiEkspektasi = "Montir"
+        },
+        // Add other job seekers here
+    };
+
+    // Data for UMKM
+    dataUMKM listUMKM[10] = {
+        {
+            .namaUMKM = "Toko Roti Ceria",
+            .kotaUMKM = "Bandung",
+            .minimalPendidikan = SMA,
+            .skillDibutuhkan = { "memasak", "kebersihan", "komunikasi" },
+            .jumlahSkillDibutuhkan = 3,
+            .gajiMinimal = 3.0,
+            .posisiDibutuhkan = "Asisten Dapur"
+        },
+        {
+            .namaUMKM = "Bengkel Motor Jaya",
+            .kotaUMKM = "Yogyakarta",
+            .minimalPendidikan = SMP,
+            .skillDibutuhkan = { "mekanik", "kerjasama", "problem solving" },
+            .jumlahSkillDibutuhkan = 3,
+            .gajiMinimal = 3.5,
+            .posisiDibutuhkan = "Montir"
+        },
+        // Add other UMKMs here
+    };
+
+    // Register UMKM and show UMKM data
     registerUMKM(&listUMKM[0]);
     showUMKM(listUMKM);
 
-//Main UI (SORAYA)
     printf("== HireMeow ==\n");
     printf("Your Local Job Matching Application!!\n");
     printf("-------------------------------------\n");
@@ -152,7 +104,7 @@ int main(){
     printf("\n1. UMKM");
     printf("\n2. Pekerja");
 
-    printf("\nPilhan Anda: ");
+    printf("\nPilihan Anda: ");
     scanf("%d", &roleInt);
 
     if (roleInt == 1) {
@@ -163,70 +115,51 @@ int main(){
         printf("Input Tidak Valid!\n");
         return 0;
     }
-        
+
     do {
         pilihan = showMenu(roleStr);
 
-        switch (pilihan)
-        {
+        switch (pilihan) {
         case 1:
             if (roleInt == 1) {
-                printf("\n== Register UMKM ==");
+                printf("\n== Register UMKM ==\n");
                 registerUMKM(&listUMKM[0]);
                 break;
             } else if (roleInt == 2) {
-                //fungsi register 
+                // Function for registering job seeker (not yet implemented)
                 break;
-            } 
-            else
-                break;
+            }
+            break;
         case 2:
             if (roleInt == 1) {
-                // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
+                // Function to recommend job seekers (not yet implemented)
                 break;
             } else if (roleInt == 2) {
-                //fungsi register 
+                // Function to recommend UMKM (not yet implemented)
                 break;
-            } 
-            else
-                break;
+            }
+            break;
         case 3:
-            if (roleInt == 1) {
-                // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
-                break;
-            } else if (roleInt == 2) {
-                //fungsi register 
-                break;
-            } 
-            else
-                break;
+            // Add functionality for filtering job seekers or UMKMs
+            break;
         case 4:
-            if (roleInt == 1) {
-                // rekomendasiPekerja(listUMKM[0]); (kurang data Job Seeker)
-                break;
-            } else if (roleInt == 2) {
-                //fungsi register 
-                break;
-            } 
-            else
-                break;
+            // Add functionality to list all job seekers or UMKMs
+            break;
         case 5:
-            printf("Keluar Program!");
+            printf("Keluar Program!\n");
             return 0;
         default:
-            printf("Pilihan anda tidak ada di opsi!");
+            printf("Pilihan anda tidak ada di opsi!\n");
             break;
         }
-    } while (pilihan!=-1);
+    } while (pilihan != -1);
 
     return 0;
 }
 
-//function
-
-//fungsi untuk ganti string Jobseeker dan UMKM (SORAYA)
+// Function to get opposite role (Pekerja or UMKM)
 const char* getOppositeRole(const char* role) {
-    if (strcmp(role, "UMKM") == 0){
+    if (strcmp(role, "UMKM") == 0) {
         return "Pekerja";
     }
     if (strcmp(role, "Pekerja") == 0) {
@@ -234,7 +167,8 @@ const char* getOppositeRole(const char* role) {
     }
     return "Tidak Dikenal";
 }
-//fungsi untuk menampilkan menu berdasarkan role (SORAYA)
+
+// Function to show menu based on role
 int showMenu(const char *role) {
     int pilihan;
     const char *opposite = getOppositeRole(role);
@@ -257,180 +191,142 @@ int showMenu(const char *role) {
     return pilihan;
 }
 
-//fungsi untuk comparing agar lowercase dan uppercase seragam (NIRMALA)
-void toLowerRemoveSpace(char *skill){
+// Function to convert string to lowercase and remove spaces
+void toLowerRemoveSpace(char *skill) {
     int j = 0;
-    for (int i = 0; i < skill[i]; i++)
-    {
+    for (int i = 0; skill[i] != '\0'; i++) {
         skill[i] = tolower(skill[i]);
     }
-    for (int i = 0; skill[i] != '\0'; i++)
-    {
-        if(skill[i] != ' '){
+    for (int i = 0; skill[i] != '\0'; i++) {
+        if (skill[i] != ' ') {
             skill[j++] = skill[i];
         }
     }
     skill[j] = '\0';
 }
 
-//fungsi hitung match score antara perushaan a dan pekerja b (NIRMALA)
-int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm){
+// Function to calculate match score between job seeker and UMKM
+int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm) {
     int score = 0;
-    //hitung berdasar skill
-    for (int i = 0; i < pekerja->jumlahSkillDipunya; i++)
-    {
-        for (int j = 0; j < umkm->jumlahSkillDibutuhkan; j++)
-        {
+
+    // Compare skills
+    for (int i = 0; i < pekerja->jumlahSkillDipunya; i++) {
+        for (int j = 0; j < umkm->jumlahSkillDibutuhkan; j++) {
             char skillUser[20], skillUMKM[20];
-            
             strcpy(skillUser, pekerja->skillDipunyai[i]);
-            strcpy(skillUMKM, umkm->skillDibutuhkan[i]);
-            
+            strcpy(skillUMKM, umkm->skillDibutuhkan[j]);
+            toLowerRemoveSpace(skillUser);
+            toLowerRemoveSpace(skillUMKM);
 
-            toLowerRemoveSpace(skillUMKM); toLowerRemoveSpace(skillUser);
-
-            if (strcmp(skillUMKM,skillUser) == 0) score += 10;
+            if (strcmp(skillUser, skillUMKM) == 0) {
+                score += 10;
+            }
         }
     }
-    //hitung berdasar kota yang sama
+
+    // Compare city
     char kotaUser[20], kotaUMKM[20];
     strcpy(kotaUser, pekerja->kotaTinggal);
     strcpy(kotaUMKM, umkm->kotaUMKM);
-    toLowerRemoveSpace(kotaUMKM); toLowerRemoveSpace(kotaUser);
-    if (strcmp(kotaUser, kotaUMKM ) == 0) score += 5;
-    
-    //hitung berdasar posisi yang sama
-    char posisiDiinginkan[20], posisiDicari[20];
-    strcpy(posisiDiinginkan, pekerja->posisiEkspektasi);
-    strcpy(posisiDicari, umkm->posisiDibutuhkan);
-    if (strcmp(kotaUser, kotaUMKM ) == 0) score += 10;
-    
-    //hitung berdasar gaji
-    if(umkm->gajiMinimal >= pekerja->gajiEkspektasi) score += 10;
-    
-    //hitung berdasar level pendidikan
-    if (pekerja->pendidikanTerakhir == umkm->minimalPendidikan) score += 5;
-    if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) score += 10;
-    else score *= 0;
-    
+    toLowerRemoveSpace(kotaUser);
+    toLowerRemoveSpace(kotaUMKM);
+    if (strcmp(kotaUser, kotaUMKM) == 0) {
+        score += 5;
+    }
+
+    // Compare position
+    char posisiUser[20], posisiUMKM[20];
+    strcpy(posisiUser, pekerja->posisiEkspektasi);
+    strcpy(posisiUMKM, umkm->posisiDibutuhkan);
+    toLowerRemoveSpace(posisiUser);
+    toLowerRemoveSpace(posisiUMKM);
+    if (strcmp(posisiUser, posisiUMKM) == 0) {
+        score += 10;
+    }
+
+    // Compare salary
+    if (umkm->gajiMinimal >= pekerja->gajiEkspektasi) {
+        score += 10;
+    }
+
+    // Compare education level
+    if (pekerja->pendidikanTerakhir >= umkm->minimalPendidikan) {
+        score += 10;
+    } else {
+        score = 0; 
+    }
 
     return score;
 }
 
-//fungsi rekomendasi umkm bagi jobseeker (NIRMALA)
-void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM){
+// Function to recommend UMKMs to job seeker
+void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM) {
     printf("List Rekomendasi UMKM untuk %s:\n", pekerja->namaPekerja);
-    for (int i = 0; i < jumlahUMKM; i++)
-    {
+    for (int i = 0; i < jumlahUMKM; i++) {
         int scoreMatch = calculateMatchScore(pekerja, &daftarUMKM[i]);
-        if (scoreMatch >= 20 && scoreMatch < 70)
-        {
+        if (scoreMatch >= 20 && scoreMatch < 70) {
             printf("> %s : cocok [matching score sebesar %d]\n", daftarUMKM[i].namaUMKM, scoreMatch);
-        } else if (scoreMatch >= 70)
-        {
+        } else if (scoreMatch >= 70) {
             printf("> %s : sangat cocok [matching score sebesar %d]\n", daftarUMKM[i].namaUMKM, scoreMatch);
         } 
     }
 }
 
-//fungsi rekomendasi pekerja bagi umkm (NIRMALA)
-void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja){
+// Function to recommend job seekers to UMKM
+void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja) {
     printf("List Rekomendasi pekerja untuk usaha %s:\n", umkm->namaUMKM);
-    for (int i = 0; i < jumlahPekerja; i++)
-    {
+    for (int i = 0; i < jumlahPekerja; i++) {
         int scoreMatch = calculateMatchScore(&daftarPekerja[i], umkm);
-        if (scoreMatch >= 20 && scoreMatch < 70)
-        {
+        if (scoreMatch >= 20 && scoreMatch < 70) {
             printf("> %s : cocok [matching score sebesar %d]\n", daftarPekerja[i].namaPekerja, scoreMatch);
-        } else if (scoreMatch >= 70)
-        {
+        } else if (scoreMatch >= 70) {
             printf("> %s : sangat cocok [matching score sebesar %d]\n", daftarPekerja[i].namaPekerja, scoreMatch);
         } 
     }
 }
 
-
-//fungsi untuk input peimilik UMKM (JOANNA)
-void registerUMKM( dataUMKM* inputUMKM){
+// Function to register a new UMKM
+void registerUMKM(dataUMKM* inputUMKM) {
     printf("\nInput nama UMKM anda: ");
-
-    scanf("%[^\n]", inputUMKM->namaUMKM);
-    getchar();
-
-    printf("Input kota UMKM anda: ");
-    scanf("%[^\n]", inputUMKM->kotaUMKM);
-    getchar();
-
-    printf("Minimal pendidikan untuk apply \n(0=tidak sekolah, 1=SD, 2=SMP, 3=SMA, 4=D3, 5=D4, 6=S1, 7=S2, 8=s3): ");
+    scanf(" %[^\n]", inputUMKM->namaUMKM);
+    printf("\nInput kota UMKM anda: ");
+    scanf(" %[^\n]", inputUMKM->kotaUMKM);
+    printf("\nMinimal pendidikan untuk apply \n(0=tidak sekolah, 1=SD, 2=SMP, 3=SMA, 4=D3, 5=D4, 6=S1, 7=S2, 8=S3): ");
     scanf("%d", &inputUMKM->minimalPendidikan);
-    getchar();
-
-    printf("Jumlah skill yang dibutuhkan untuk apply (Maksimal 5): "); 
+    printf("\nSkill yang dibutuhkan untuk apply: ");
+    scanf(" %[^\n]", inputUMKM->skillDibutuhkan);
+    printf("\nJumlah skill yang dibutuhkan untuk apply: ");
     scanf("%d", &inputUMKM->jumlahSkillDibutuhkan);
-    getchar();
-
-    for(int i=0; i<inputUMKM->jumlahSkillDibutuhkan; i++){
-        printf("Skill %d yang dibutuhkan untuk apply: ", i+1);
-        scanf("%[^\n]", (inputUMKM->skillDibutuhkan[i]));
-        getchar();
-    }
-
-    printf("Gaji minimal yang diberikan: ");
+    printf("\nGaji minimal yang diberikan: ");
     scanf("%f", &inputUMKM->gajiMinimal);
-    getchar();
-    
-    printf("Posisi yang dibutuhkan: ");
-    scanf("%[^\n]", inputUMKM->posisiDibutuhkan);
-    getchar();
+    printf("\nPosisi yang dibutuhkan: ");
+    scanf(" %[^\n]", inputUMKM->posisiDibutuhkan);
 }
 
-void showUMKM(dataUMKM* daftarUMKM){
-
+// Function to show all available UMKMs
+void showUMKM(dataUMKM* daftarUMKM) {
     printf("\n==== List UMKM yang tersedia: ====\n\n");
-    for(int i=0; i<11; i++){
-        printf("%d. ", i+1);
-        printf("%s\n",daftarUMKM[i].namaUMKM);
+    for (int i = 0; i < 10; i++) {
+        printf("%d. ", i + 1);
+        printf("%s\n", daftarUMKM[i].namaUMKM);
         printf("    Kota: %s\n", daftarUMKM[i].kotaUMKM);
         printf("    Minimal Pendidikan: ");
-        switch (daftarUMKM[i].minimalPendidikan)
-        {
-        case 0:
-            printf("Tidak Sekolah\n");
-            break;
-        case 1:
-            printf("SD\n");
-            break;
-        case 2:
-            printf("SMP\n");
-            break;
-        case 3:
-            printf("SMA\n");
-            break;
-        case 4:
-            printf("D3\n");
-            break;
-        case 5:
-            printf("D4\n");
-            break;
-        case 6:
-            printf("S1\n");
-            break;
-        case 7:
-            printf("S2\n");
-            break;
-        case 8:
-            printf("S3\n");
-            break;
-        default:
-            break;
+        switch (daftarUMKM[i].minimalPendidikan) {
+            case 0: printf("Tidak Sekolah\n"); break;
+            case 1: printf("SD\n"); break;
+            case 2: printf("SMP\n"); break;
+            case 3: printf("SMA\n"); break;
+            case 4: printf("D3\n"); break;
+            case 5: printf("D4\n"); break;
+            case 6: printf("S1\n"); break;
+            case 7: printf("S2\n"); break;
+            case 8: printf("S3\n"); break;
+            default: break;
         }
         printf("    Skill yang dibutuhkan: \n");
-        for (int j = 0; j < daftarUMKM[i].jumlahSkillDibutuhkan; j++)
-        {
-            printf("        %d. %s\n", j+1, daftarUMKM[i].skillDibutuhkan[j]);
+        for (int j = 0; j < daftarUMKM[i].jumlahSkillDibutuhkan; j++) {
+            printf("        %d. %s\n", j + 1, daftarUMKM[i].skillDibutuhkan[j]);
         }
         printf("    Gaji Minimal: Rp%.2f\n\n", daftarUMKM[i].gajiMinimal);
     }
 }
-
-//fungsi untuk input Pekerja 
