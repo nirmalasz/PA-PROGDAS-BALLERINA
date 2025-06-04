@@ -379,8 +379,7 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm, modeFilter mode)
         printf("Filter tidak valid");
         return -1;
     }
-
-    if (mode == 0){
+    
     //hitung berdasar skill
     for (int i = 0; i < pekerja->jumlahSkillDipunya; i++)
     {
@@ -397,12 +396,13 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm, modeFilter mode)
         }
     }
 
-       //hitung berdasar posisi yang sama
+    //hitung berdasar posisi yang sama
     char posisiDiinginkan[20], posisiDicari[20];
     strcpy(posisiDiinginkan, pekerja->posisiEkspektasi);
     strcpy(posisiDicari, umkm->posisiDibutuhkan);
+    toLowerRemoveSpace(posisiDiinginkan); toLowerRemoveSpace(posisiDicari);
     if (strcmp(posisiDiinginkan, posisiDicari) == 0) score += 10;
-    }
+    
     
     if(mode == 0 || mode == 1){
         //hitung berdasar kota yang sama
@@ -461,13 +461,13 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
 
 //fungsi untuk input pemilik UMKM (JOANNA)
 void registerUMKM( dataUMKM* inputUMKM){
-    printf("\nInput nama UMKM anda: ");
+    printf("\nInput nama UMKM anda (ex. John Doe): ");
     getchar();
 
     scanf("%[^\n]", inputUMKM->namaUMKM);
     getchar();
 
-    printf("Input kota UMKM anda: ");
+    printf("Input kota UMKM anda (ex. Jakarta): ");
     scanf("%[^\n]", inputUMKM->kotaUMKM);
     getchar();
 
@@ -480,16 +480,16 @@ void registerUMKM( dataUMKM* inputUMKM){
     getchar();
 
     for(int i=0; i<inputUMKM->jumlahSkillDibutuhkan; i++){
-        printf("Skill %d yang dibutuhkan untuk apply: ", i+1);
+        printf("Skill %d yang dibutuhkan untuk apply (ex. Fotografi): ", i+1);
         scanf("%[^\n]", (inputUMKM->skillDibutuhkan[i]));
         getchar();
     }
 
-    printf("Gaji minimal yang diberikan: ");
+    printf("Gaji minimal yang diberikan (dalam juta) (ex. 1000000 ditulis 1): ");
     scanf("%f", &inputUMKM->gajiMinimal);
     getchar();
     
-    printf("Posisi yang dibutuhkan: ");
+    printf("Posisi yang dibutuhkan (ex. HRD): ");
     scanf("%[^\n]", inputUMKM->posisiDibutuhkan);
     getchar();
 }
@@ -525,10 +525,10 @@ void showUMKM(dataUMKM* daftarUMKM) {
 
 //fungsi untuk input pekerja (Thalita)
 void registerJobSeeker(dataJobSeeker *pekerja) {
-    printf("Nama Anda: ");
+    printf("Nama Anda (ex. John Doe): ");
     scanf(" %[^\n]", pekerja->namaPekerja);
 
-    printf("Kota Tinggal: ");
+    printf("Kota Tinggal (ex. Bekasi): ");
     scanf(" %[^\n]", pekerja->kotaTinggal);
 
     printf("Pendidikan Terakhir:\n");
@@ -544,7 +544,7 @@ void registerJobSeeker(dataJobSeeker *pekerja) {
     printf("Masukkan pilihan (0-8): ");
     scanf("%d", (int*)&pekerja->pendidikanTerakhir);
 
-    printf("Jumlah Skill yang Anda miliki: ");
+    printf("Jumlah Skill yang Anda miliki (max 5): ");
     scanf("%d", &pekerja->jumlahSkillDipunya);
 
     for (int i = 0; i < pekerja->jumlahSkillDipunya; i++) {
@@ -552,10 +552,10 @@ void registerJobSeeker(dataJobSeeker *pekerja) {
         scanf(" %[^\n]", pekerja->skillDipunyai[i]);
     }
 
-    printf("Gaji Ekspektasi (dalam juta): ");
+    printf("Gaji Ekspektasi (dalam juta) (ex. 1000000 ditulis 1): ");
     scanf("%f", &pekerja->gajiEkspektasi);
 
-    printf("Posisi yang Diharapkan: ");
+    printf("Posisi yang Diharapkan (ex. Product Manager): ");
     scanf(" %[^\n]", pekerja->posisiEkspektasi);
 }
 
