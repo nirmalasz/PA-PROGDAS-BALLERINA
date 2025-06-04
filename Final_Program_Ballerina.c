@@ -4,8 +4,8 @@
 #include <string.h>
 #include <ctype.h>
 
-
 //struct enum (NIRMALA)
+
 typedef enum{
     tidak_sekolah, SD, SMP, SMA, D3, D4, S1, S2, S3
 } tingkatPendidikan;
@@ -38,6 +38,7 @@ int calculateMatchScore(dataJobSeeker *pekerja, dataUMKM *umkm);
 void rekomendasiUMKM(dataJobSeeker *pekerja, dataUMKM daftarUMKM[], int jumlahUMKM);
 void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumlahPekerja);
 void registerUMKM( dataUMKM* inputUMKM);
+void showUMKM(dataUMKM* daftarUMKM);
 
 
 int main(){
@@ -139,6 +140,9 @@ int main(){
     }
 };
 
+    registerUMKM(&listUMKM[0]);
+    showUMKM(listUMKM);
+
 //Main UI (SORAYA)
     printf("== HireMeow ==\n");
     printf("Your Local Job Matching Application!!\n");
@@ -215,7 +219,6 @@ int main(){
         }
     } while (pilihan!=-1);
 
-    
     return 0;
 }
 
@@ -346,27 +349,88 @@ void rekomendasiPekerja(dataUMKM *umkm, dataJobSeeker daftarPekerja[], int jumla
     }
 }
 
+
 //fungsi untuk input peimilik UMKM (JOANNA)
 void registerUMKM( dataUMKM* inputUMKM){
     printf("\nInput nama UMKM anda: ");
+
     scanf("%[^\n]", inputUMKM->namaUMKM);
     getchar();
-    printf("\nInput kota UMKM anda: ");
+
+    printf("Input kota UMKM anda: ");
     scanf("%[^\n]", inputUMKM->kotaUMKM);
     getchar();
-    printf("\nMinimal pendidikan untuk apply \n(0=SD, 1=SMP, 2=SMA, 3=D3, 4=D4, 5=S1, 6=S2, 7=S3): ");
-    scanf("%d", inputUMKM->minimalPendidikan);
+
+    printf("Minimal pendidikan untuk apply \n(0=tidak sekolah, 1=SD, 2=SMP, 3=SMA, 4=D3, 5=D4, 6=S1, 7=S2, 8=s3): ");
+    scanf("%d", &inputUMKM->minimalPendidikan);
     getchar();
-    printf("\nSkill yang dibutuhkan untuk apply: ");
-    scanf("%[^\n]", inputUMKM->skillDibutuhkan);
+
+    printf("Jumlah skill yang dibutuhkan untuk apply (Maksimal 5): "); 
+    scanf("%d", &inputUMKM->jumlahSkillDibutuhkan);
     getchar();
-    printf("\nJumlah skill yang dibutuhkan untuk apply: ");
-    scanf("%d", inputUMKM->jumlahSkillDibutuhkan);
+
+    for(int i=0; i<inputUMKM->jumlahSkillDibutuhkan; i++){
+        printf("Skill %d yang dibutuhkan untuk apply: ", i+1);
+        scanf("%[^\n]", (inputUMKM->skillDibutuhkan[i]));
+        getchar();
+    }
+
+    printf("Gaji minimal yang diberikan: ");
+    scanf("%f", &inputUMKM->gajiMinimal);
     getchar();
-    printf("\nGaji minimal yang diberikan: ");
-    scanf("%lf", inputUMKM->gajiMinimal);
-    getchar();
-    printf("\nPosisi yang dibutuhkan: ");
+    
+    printf("Posisi yang dibutuhkan: ");
     scanf("%[^\n]", inputUMKM->posisiDibutuhkan);
     getchar();
 }
+
+void showUMKM(dataUMKM* daftarUMKM){
+
+    printf("\n==== List UMKM yang tersedia: ====\n\n");
+    for(int i=0; i<11; i++){
+        printf("%d. ", i+1);
+        printf("%s\n",daftarUMKM[i].namaUMKM);
+        printf("    Kota: %s\n", daftarUMKM[i].kotaUMKM);
+        printf("    Minimal Pendidikan: ");
+        switch (daftarUMKM[i].minimalPendidikan)
+        {
+        case 0:
+            printf("Tidak Sekolah\n");
+            break;
+        case 1:
+            printf("SD\n");
+            break;
+        case 2:
+            printf("SMP\n");
+            break;
+        case 3:
+            printf("SMA\n");
+            break;
+        case 4:
+            printf("D3\n");
+            break;
+        case 5:
+            printf("D4\n");
+            break;
+        case 6:
+            printf("S1\n");
+            break;
+        case 7:
+            printf("S2\n");
+            break;
+        case 8:
+            printf("S3\n");
+            break;
+        default:
+            break;
+        }
+        printf("    Skill yang dibutuhkan: \n");
+        for (int j = 0; j < daftarUMKM[i].jumlahSkillDibutuhkan; j++)
+        {
+            printf("        %d. %s\n", j+1, daftarUMKM[i].skillDibutuhkan[j]);
+        }
+        printf("    Gaji Minimal: Rp%.2f\n\n", daftarUMKM[i].gajiMinimal);
+    }
+}
+
+//fungsi untuk input Pekerja 
